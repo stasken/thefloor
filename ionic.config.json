@@ -1,0 +1,7 @@
+{
+  "name": "TheFloor",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,14 @@
+#create-game-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    #form-container {
+        width: 85%;
+        height: 30%;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid white;
+    }
+}

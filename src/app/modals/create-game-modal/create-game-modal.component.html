@@ -1,0 +1,15 @@
+<div id="create-game-container">
+  <div id="form-container">
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Number of categories</ion-label>
+      <ion-input type="number" min="10" max="50" [(ngModel)]="categories"></ion-input>
+    </ion-item>
+
+    <ion-button (click)="addGame()">Add game</ion-button>
+  </div>
+</div>

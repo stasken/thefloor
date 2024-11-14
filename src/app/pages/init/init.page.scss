@@ -1,6 +1,11 @@
-.select-game {
+#init-container {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
+
+    #init-btns {
+        width: 50%;
+        height: 50%;
+    }
 }

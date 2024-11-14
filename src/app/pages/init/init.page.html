@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Create or load game</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Create or load game</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div id="init-container">
+    <div id="init-btns">
+      <ion-button (click)="openCreateGameModal()">Create new game</ion-button>
+      <ion-button (click)="openLoadGameModal()">Join existing game</ion-button>
+    </div>
+  </div>
+</ion-content>

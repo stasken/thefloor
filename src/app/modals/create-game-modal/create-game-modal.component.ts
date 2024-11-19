@@ -11,9 +11,10 @@ import { ToasterService } from 'src/app/services/toaster.service';
 })
 export class CreateGameModalComponent implements OnInit {
   name!: string;
-  categories!: number;
+  categories: number;
 
   constructor(private modalController: ModalController, private toaster: ToasterService) {
+    this.categories = 0;
   }
 
   ngOnInit() {
@@ -28,14 +29,16 @@ export class CreateGameModalComponent implements OnInit {
   }
 
   checkIfGameIsValid(): boolean {
+    let isValid = true;
     if (!this.name || this.name.trim().length < 3) {
-      this.toaster.presentToast("Name should at least contain 3 characters", "warning")
-      return false;
-    } else if (this.categories < 10 || this.categories > 50) {
-      this.toaster.presentToast("Number of categories should be between 10 and 50", "warning")
-      return false;
+      this.toaster.showToast("Name should at least contain 3 characters", 2000, "warning")
+      isValid = false;
+    } 
+    if (this.categories < 10 || this.categories > 50) {
+      this.toaster.showToast("Number of categories should be between 10 and 50", 2000, "warning")
+      isValid = false;
     }
-    return true;
+    return isValid;
   }
 
   

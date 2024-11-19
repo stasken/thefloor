@@ -8,6 +8,7 @@ import { TabsPageRoutingModule } from './tabs-routing.module';
 import { TabsPage } from './tabs.page';
 import { CreateGameModalComponent } from '../modals/create-game-modal/create-game-modal.component';
 import { AddUserModalComponent } from '../modals/add-user-modal/add-user-modal.component';
+import { LoadGameModalComponent } from '../modals/load-game-modal/load-game-modal.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { AddUserModalComponent } from '../modals/add-user-modal/add-user-modal.c
     FormsModule,
     TabsPageRoutingModule
   ],
-  declarations: [TabsPage, CreateGameModalComponent, AddUserModalComponent]
+  declarations: [TabsPage, CreateGameModalComponent, LoadGameModalComponent, AddUserModalComponent]
 })
 export class TabsPageModule {}

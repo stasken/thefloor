@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+// import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 import { Storage } from '@ionic/storage-angular';
 
@@ -16,18 +16,16 @@ export class StorageService {
     if (this._storage != null) {
       return;
     }
-    await this.storage.defineDriver(CordovaSQLiteDriver);
+    // await this.storage.defineDriver(CordovaSQLiteDriver);
     const storage = await this.storage.create();
     this._storage = storage;
   }
 
   public async set(key: string, value: any): Promise<any> {
-    await this.init();
     return await this._storage?.set(key, value);
   }
 
   public async get(key: string): Promise<any> {
-    await this.init();
     return await this._storage?.get(key);
   }
 }

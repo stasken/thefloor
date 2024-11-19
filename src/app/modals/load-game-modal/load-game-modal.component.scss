@@ -1,4 +1,4 @@
-#create-game-container {
+#load-game-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,7 +11,7 @@
         text-align: center;
         border: 1px solid white;
 
-        .add-game-btn {
+        .load-game-btn {
             margin-top: 1rem;
         }
     }

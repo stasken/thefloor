@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +7,9 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private storage: Storage) {}
+  constructor(private storage: StorageService) {}
 
-  ngOnInit() {
-    this.initializeDriver();
-  }
-
-  async initializeDriver() {
-    await this.storage.create();
+  async ngOnInit() {
+    await this.storage.init();
   }
 }

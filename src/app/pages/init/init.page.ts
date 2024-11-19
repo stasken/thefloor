@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from 'src/app/modals/create-game-modal/create-game-modal.component';
 import { LoadGameModalComponent } from 'src/app/modals/load-game-modal/load-game-modal.component';
 import { Game } from 'src/app/models/game';
 import { GamesService } from 'src/app/services/games.service';
+import { LogsService } from 'src/app/services/logs.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { ToasterService } from 'src/app/services/toaster.service';
 
@@ -20,6 +22,7 @@ export class InitPage implements OnInit {
   constructor(
     private mdlCtrl: ModalController,
     private gamesService: GamesService,
+    private logsService: LogsService,
     private router: Router,
     private toaster: ToasterService,
     private storage: StorageService
@@ -49,9 +52,9 @@ export class InitPage implements OnInit {
     openGameModal.onDidDismiss().then((data) => {
       let gameInputs = data.data;
       if (gameInputs) {
-          this.storage.set("gameId", gameInputs.id);
-          this.toaster.showToast("Game loaded!", 2000, "success");
-          this.router.navigate(['/settings']);
+        this.storage.set("gameId", gameInputs.id);
+        this.toaster.showToast("Game loaded!", 2000, "success");
+        this.router.navigate(['/settings']);
       }
     })
 
@@ -77,6 +80,10 @@ export class InitPage implements OnInit {
           this.router.navigate(['/settings']);
         }, (error) => {
           this.toaster.showToast("Error creating the game...", 2000, "danger");
+          let msg;
+          if (error.message) { msg = error.message; } else { msg = error; }
+          let startTime = Timestamp.fromDate(new Date());
+          this.logsService.addLog({ message: msg,where:"Create Game Modal -- add game",error: true, date: startTime  })
         })
       }
     })

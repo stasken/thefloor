@@ -25,4 +25,8 @@ export class LoadGameModalComponent  implements OnInit {
     }
   }
 
+  goBack() {
+    this.modalController.dismiss();
+  }
+
 }

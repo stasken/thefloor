@@ -28,12 +28,16 @@ export class CreateGameModalComponent implements OnInit {
     }
   }
 
+  goBack() {
+    this.modalController.dismiss();
+  }
+
   checkIfGameIsValid(): boolean {
     let isValid = true;
     if (!this.name || this.name.trim().length < 3) {
       this.toaster.showToast("Name should at least contain 3 characters", 2000, "warning")
       isValid = false;
-    } 
+    }
     if (this.categories < 10 || this.categories > 50) {
       this.toaster.showToast("Number of categories should be between 10 and 50", 2000, "warning")
       isValid = false;
@@ -41,5 +45,5 @@ export class CreateGameModalComponent implements OnInit {
     return isValid;
   }
 
-  
+
 }

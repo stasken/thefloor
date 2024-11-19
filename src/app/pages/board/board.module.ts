@@ -2,17 +2,17 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab3Page } from './tab3.page';
+import { BoardPage } from './board.page';
 
-import { Tab3PageRoutingModule } from './tab3-routing.module';
+import { BoardPageRoutingModule } from './board-routing.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    Tab3PageRoutingModule
+    BoardPageRoutingModule
   ],
-  declarations: [Tab3Page]
+  declarations: [BoardPage]
 })
-export class Tab3PageModule {}
+export class BoardPageModule {}

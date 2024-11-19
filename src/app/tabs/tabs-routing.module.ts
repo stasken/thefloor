@@ -15,17 +15,17 @@ const routes: Routes = [
       {
         path: 'settings',
         canActivate: [GameIdGuard],
-        loadChildren: () => import('../pages/tab1/tab1.module').then(m => m.Tab1PageModule)
+        loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsPageModule)
       },
       {
         path: 'board',
         canActivate: [GameIdGuard],
-        loadChildren: () => import('../pages/tab2/tab2.module').then(m => m.Tab2PageModule)
+        loadChildren: () => import('../pages/board/board.module').then(m => m.BoardPageModule)
       },
       {
         path: 'duel',
         canActivate: [GameIdGuard],
-        loadChildren: () => import('../pages/tab3/tab3.module').then(m => m.Tab3PageModule)
+        loadChildren: () => import('../pages/duel/duel.module').then(m => m.DuelPageModule)
       },
       {
         path: '',

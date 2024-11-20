@@ -1,11 +1,14 @@
 <div id="load-game-container">
   <div id="form-container">
     <ion-item>
-      <ion-label position="floating">Game ID</ion-label>
-      <ion-input type="text" [(ngModel)]="id"></ion-input>
+      <ion-label position="floating">Game name</ion-label>
+      <!-- <ion-label position="floating">Game ID</ion-label> -->
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+      <!-- <ion-input type="text" [(ngModel)]="id"></ion-input> -->
     </ion-item>
 
-    <ion-button class="btn" (click)="loadGame()">Load game</ion-button>
+    <ion-button class="btn" (click)="loadGameByName()">Load game</ion-button>
+    <!-- <ion-button class="btn" (click)="loadGameById()">Load game</ion-button> -->
     <ion-button class="btn" (click)="goBack()">Go back</ion-button>
   </div>
 </div>

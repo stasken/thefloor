@@ -1,6 +1,7 @@
-<div>
-  <div *ngFor="let user of users">
-    <h3>{{ user.name }}</h3>
+<div id="settings-user">
+  <ion-title>Current users</ion-title>
+  <div>
+    <h5 *ngFor="let user of users">{{ user.name }}</h5>
   </div>
 
   <ion-button (click)="addUser()">Add User</ion-button>

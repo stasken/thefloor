@@ -19,8 +19,6 @@ export class AddUsersComponent  implements OnInit {
   async ngOnInit() {
     this.testUsers();
     await this.storage.get('gameId').then((res) => {
-      console.log('lllz');
-      
       if (res) {
         this.gameId = res;
         console.log(res);

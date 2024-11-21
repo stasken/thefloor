@@ -17,24 +17,18 @@ export class AddUsersComponent  implements OnInit {
   constructor(private modalController: ModalController, private userService: UserService, private storage: Storage) { }
 
   async ngOnInit() {
-    this.testUsers();
     await this.storage.get('gameId').then((res) => {
       if (res) {
         this.gameId = res;
-        console.log(res);
-        
+        this.getUsersOfGame()
       }
     });
   }
 
-  testUsers() {
-    let user1 = new User("test","Arno","blue")
-    let user2 = new User("test","Lud","green")
-    let user3 = new User("test","Thomas","yellow")
-    let user4 = new User("test","Mel","red")
-    let user5 = new User("test","Elias","purple")
-
-    this.users.push(user1,user2,user3,user4,user5)
+  getUsersOfGame() {
+    this.userService.getAllPlayers(this.gameId).then(res => {
+      this.users = [...res];
+    })
   }
 
   addUser() {
@@ -50,7 +44,10 @@ export class AddUsersComponent  implements OnInit {
     modal.onDidDismiss().then((data) => {
       if (data.data && data.data instanceof User) {
         let user = data.data as User;
-        this.userService.addUser(user);
+        this.userService.addUser({name:user.name,color:user.color,gameId:user.gameId}).then(userRef => {
+          user.id = userRef.id
+          this.users.push(user);
+        })
       } else {
       }
     });

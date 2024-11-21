@@ -1,7 +1,10 @@
 <div id="settings-user">
   <ion-title>Current users</ion-title>
-  <div>
-    <h5 *ngFor="let user of users">{{ user.name }}</h5>
+  <div *ngIf="users.length===0">
+    <h5>No users yet. Click "Add user" to add your first player.</h5>
+  </div>
+  <div *ngFor="let user of users">
+    <app-user *ngIf="user" [user]="user"></app-user>
   </div>
 
   <ion-button (click)="addUser()">Add User</ion-button>

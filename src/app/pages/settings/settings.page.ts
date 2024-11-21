@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-settings',
@@ -7,6 +9,11 @@ import { Component } from '@angular/core';
 })
 export class SettingsPage {
 
-  constructor() {}
+  constructor(private storage: StorageService, private router: Router) {}
 
+  logOut() {
+    this.storage.set('gameId',"").then(res => {
+      this.router.navigate(['/init']);
+    })
+  }
 }

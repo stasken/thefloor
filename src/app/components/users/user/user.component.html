@@ -1,0 +1,21 @@
+<div id="user-div">
+  <div class="">
+    <input 
+        [style.background]="changedUser.color" 
+        [(colorPicker)]="changedUser.color"
+        (colorPickerClose)="onChangeColorHex8($event)"
+        (cpCmykColorChange)="onChangeColorCmyk($event)"
+        [cpOKButton] = "true"
+        [cpOKButtonText] = "'Select'"
+        [cpCancelButton] = "true"
+        [cpSaveClickOutside] = "false"
+        [cpDisableInput]="false"
+        [cpAlphaChannel]="'disabled'" 
+        [cpOutputFormat]="'hex'"
+        [cpPresetColors]="presetValues"
+        [cpAddColorButton]="true" 
+    />
+  </div>
+  <h5>{{ user.name }}</h5>
+  <ion-button (click)="saveUser()" [disabled]="!userHasChanged">Save user</ion-button>
+</div>

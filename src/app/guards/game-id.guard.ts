@@ -10,7 +10,7 @@ export class GameIdGuard implements CanActivate {
   constructor(private storage: Storage, private router: Router) { }
 
   async canActivate(): Promise<boolean> {
-    const gameId = await this.storage.get('gameId');
+    const gameId = await this.storage.get('gameId')
     if (gameId) {
       return true;
     } else {

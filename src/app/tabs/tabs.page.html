@@ -2,12 +2,12 @@
 
   <div class="tabs">
     <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="settings" href="/settings">
+      <ion-tab-button tab="settings" (click)="navigateToSettings()">
         <ion-icon aria-hidden="true" name="settings"></ion-icon>
         <ion-label>Settings</ion-label>
       </ion-tab-button>
 
-      <ion-tab-button tab="board" href="/board">
+      <ion-tab-button tab="board" (click)="navigateToBoard()">
         <ion-icon aria-hidden="true" name="grid"></ion-icon>
         <ion-label>Board</ion-label>
       </ion-tab-button>

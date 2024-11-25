@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { GameCategory } from 'src/app/models/gameCategory';
@@ -14,12 +14,16 @@ import { UserService } from 'src/app/services/users.service';
   templateUrl: 'duel.page.html',
   styleUrls: ['duel.page.scss']
 })
-export class DuelPage {
+export class DuelPage implements OnInit, OnDestroy {
   gameId!: string;
   gameCategory!: GameCategory;
+  challengingGameCategory!: GameCategory;
   otherCategoryName!: string;
   challengedUser!: User;
   challenger!: User;
+
+  currentChallengingGcIds!: string[];
+  currentPickedGcIds!: string[];
 
   questions: Question[] = [];
   currentQuestion!: Question | null;
@@ -38,6 +42,8 @@ export class DuelPage {
   constructor(private route: ActivatedRoute, private router: Router, private storage: StorageService, private questionService: QuestionsService, private gcService: CategoryService, private userService: UserService) { }
 
   ngOnInit(): void {
+    console.log('ngOnInit called');
+
     this.route.queryParams.subscribe(async params => {
       this.gameId = params['gameId'];
       this.otherCategoryName = params['otherCategoryName'];
@@ -46,8 +52,11 @@ export class DuelPage {
       await this.getAllData(challengerId, challengedUserId);
     });
   }
-
+  
+  @HostListener('unloaded')
   ngOnDestroy() {
+    console.log('ngOnDestroy called');
+
     this.questions = [];
     this.currentQuestion = null;
     this.currentQuestionIndex = 0;
@@ -59,9 +68,19 @@ export class DuelPage {
   }
 
   async getAllData(cid: string, cuid: string) {
-   await this.storage.get("currentGc").then(gc => {
+    await this.storage.get("currentPickedGc").then(gc => {
       let currGc = gc as GameCategory;
       this.gameCategory = currGc;
+    })
+    await this.storage.get("currentChallengingGc").then(gc => {
+      let currChallengingGc = gc as GameCategory;
+      this.challengingGameCategory = currChallengingGc;
+    })
+    await this.storage.get("currentChallengingGcIds").then(gcIds => {
+      this.currentChallengingGcIds = gcIds;
+    })
+    await this.storage.get("currentPickedGcIds").then(gcIds => {
+      this.currentPickedGcIds = gcIds;
     })
     this.getQuestions();
     this.getUsers(cid, cuid);
@@ -72,7 +91,7 @@ export class DuelPage {
     // bvvQVpqwcG20lPgkjVz6 Movies
     // 1ghVcJETp1OSac8DPA7J Vlaggen
     // this.questionService.getQuestionsOfCategory(this.categoryId).then(qs => {
-    this.questionService.getQuestionsOfCategory("1ghVcJETp1OSac8DPA7J").then(qs => {
+    this.questionService.getQuestionsOfCategory("bvvQVpqwcG20lPgkjVz6").then(qs => {
       this.questions = [...qs]
     })
   }
@@ -81,9 +100,9 @@ export class DuelPage {
     this.userService.getAllPlayers(this.gameId).then(users => {
       users.forEach(user => {
         if (user.id === cid) {
-          this.challengedUser = user;
-        } else if (user.id === cuid) {
           this.challenger = user;
+        } else if (user.id === cuid) {
+          this.challengedUser = user;
         }
       });
     })
@@ -143,27 +162,44 @@ export class DuelPage {
     });
   }
 
-  duelFinished(challengerWon: boolean) {
-    this.isFinished = true;
+  async duelFinished(challengerWon: boolean) {
     if (challengerWon) {
       this.winnerName = this.challenger.name
       this.winner = this.challenger;
+      this.currentPickedGcIds.forEach(async gcId => {
+        await this.gcService.updateGameCategoryById(gcId,this.winner.id??"",this.otherCategoryName,this.winner.color)
+      });
     } else {
       this.winnerName = this.challengedUser.name
       this.winner = this.challengedUser;
+      this.currentChallengingGcIds.forEach(async gcId => {
+        await this.gcService.updateGameCategoryById(gcId,this.winner.id??"",this.otherCategoryName,this.winner.color)
+      });
     }
-  }
-
-  finishDuel() {
-    // GC update, winnerId, currentUserId, finished, categoryName, color
+    this.isFinished = true;
+    this.gameCategory.finished = true;
     this.gameCategory.winnerId = this.winner.id ?? "";
     this.gameCategory.currentUserId = this.winner.id ?? "";
-    this.gameCategory.finished = true;
     this.gameCategory.categoryName = this.otherCategoryName;
     this.gameCategory.color = this.winner.color;
+    await this.gcService.updateGameCategory(this.gameCategory).then(res => {
+      this.storage.set("currentWinnerId", this.winner.id);
+    })
 
-    this.gcService.updateGameCategory(this.gameCategory).then(res => {
-      this.router.navigate(['/board']);
+  }
+
+  async finishDuel() {
+    this.challengingGameCategory.currentUserId = this.winner.id ?? "";
+    this.challengingGameCategory.color = this.winner.color;
+    this.challengingGameCategory.categoryName = this.otherCategoryName;
+
+    await this.gcService.updateGameCategory(this.challengingGameCategory).then(res => {
+      this.router.navigate(['/board'], {
+        queryParams: {
+          winner: true,
+        },
+        replaceUrl : true
+      });
     })
   }
 

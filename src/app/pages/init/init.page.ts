@@ -35,10 +35,9 @@ export class InitPage implements OnInit {
         const matchedGame = this.allGames.find(game => game.id === id);
         if (matchedGame) {
           this.currentGame = matchedGame;
-          this.router.navigate(['/settings']);
+          this.router.navigateByUrl('/settings');
         }
       })
-
     })
   }
 
@@ -53,8 +52,9 @@ export class InitPage implements OnInit {
       let gameInputs = data.data;
       if (gameInputs) {
         this.storage.set("gameId", gameInputs.id);
+        this.storage.set("started", gameInputs.started);
         this.toaster.showToast("Game loaded!", 2000, "success");
-        this.router.navigate(['/settings']);
+        this.router.navigateByUrl('/settings');
       }
     })
 
@@ -77,13 +77,13 @@ export class InitPage implements OnInit {
         }).then(async res => {
           await this.storage.set("gameId", res.id);
           this.toaster.showToast("Game created!", 2000, "success");
-          this.router.navigate(['/settings']);
+          this.router.navigateByUrl('/settings');
         }, (error) => {
           this.toaster.showToast("Error creating the game...", 2000, "danger");
           let msg;
           if (error.message) { msg = error.message; } else { msg = error; }
           let startTime = Timestamp.fromDate(new Date());
-          this.logsService.addLog({ message: msg,where:"Create Game Modal -- add game",error: true, date: startTime  })
+          this.logsService.addLog({ message: msg, where: "Create Game Modal -- add game", error: true, date: startTime })
         })
       }
     })

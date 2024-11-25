@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/users.service';
   templateUrl: './add-users.component.html',
   styleUrls: ['./add-users.component.scss'],
 })
-export class AddUsersComponent  implements OnInit {
+export class AddUsersComponent implements OnInit {
   @Input() started: boolean = false;
   users: User[] = [];
   gameId!: string;
@@ -21,13 +21,13 @@ export class AddUsersComponent  implements OnInit {
     await this.storage.get('gameId').then((res) => {
       if (res) {
         this.gameId = res;
-        this.getUsersOfGame()
+        this.getUsersOfGame(res)
       }
     });
   }
 
-  getUsersOfGame() {
-    this.userService.getAllPlayers(this.gameId).then(res => {
+  getUsersOfGame(gameId: string) {
+    this.userService.getAllPlayers(gameId).then(res => {
       this.users = [...res];
     })
   }
@@ -45,7 +45,7 @@ export class AddUsersComponent  implements OnInit {
     modal.onDidDismiss().then((data) => {
       if (data.data && data.data instanceof User) {
         let user = data.data as User;
-        this.userService.addUser({name:user.name,color:user.color,gameId:user.gameId}).then(userRef => {
+        this.userService.addUser({ name: user.name, color: user.color, gameId: user.gameId }).then(userRef => {
           user.id = userRef.id
           this.users.push(user);
         })

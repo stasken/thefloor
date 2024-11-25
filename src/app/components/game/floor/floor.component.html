@@ -7,7 +7,11 @@
   </div>
 </div>
 <div class="floor-actions">
-  <ion-button class="floor-btn green-btn" fill="outline" color="success" (click)="doYourThing()">
+  <ion-button *ngIf="winnerAvailable" class="floor-btn yellow-btn" fill="outline" color="warning" (click)="checkWinner()">
+    <ion-icon slot="end" name="shield-checkmark-outline"></ion-icon>
+    Check
+  </ion-button>
+  <ion-button *ngIf="!winnerAvailable" class="floor-btn green-btn" fill="outline" color="success" (click)="doYourThing()">
     <ion-icon slot="end" name="push-outline"></ion-icon>
     Volgende
   </ion-button>

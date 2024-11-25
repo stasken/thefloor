@@ -28,4 +28,8 @@ export class StorageService {
   public async get(key: string): Promise<any> {
     return await this._storage?.get(key);
   }
+
+  async clear() {
+    return await this._storage?.clear();
+  }
 }

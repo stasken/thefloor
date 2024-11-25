@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GameCategory } from 'src/app/models/gameCategory';
 import { User } from 'src/app/models/user';
 import { CategoryService } from 'src/app/services/category.service';
@@ -20,66 +20,112 @@ export class FloorComponent implements OnInit {
   currentPickedUser!: User | undefined;
   currentPickedCategory!: GameCategory;
   otherCategoryName!: string;
+  winnerAvailable: boolean = false;
 
   @ViewChildren('gcElement') gcElements!: QueryList<ElementRef>;
 
-  constructor(private storage: StorageService, private userService: UserService, private router: Router, private toaster: ToasterService,private catService: CategoryService) { }
+  constructor(private route: ActivatedRoute, private storage: StorageService, private userService: UserService, private router: Router, private toaster: ToasterService, private catService: CategoryService) { }
 
   async ngOnInit() {
-    await this.storage.get('gameId').then((res) => {
-      if (res) {
-        this.gameId = res;
-        this.getCurrentGameCategories();
-        this.getUsersOfGame();
+    await this.getUsersOfGame();
+    await this.route.queryParams.subscribe(async params => {
+      this.getCurrentGameCategories();
+      if (params['winner']) {
+        this.winnerAvailable = true;
       }
     });
   }
 
-  getUsersOfGame() {
-    this.userService.getAllPlayers(this.gameId).then(res => {
-      this.users = [...res];
-    })
+  async getUsersOfGame() {
+    await this.storage.get('gameId').then((res) => {
+      this.userService.getAllPlayers(res).then(users => {
+        this.users = [...users];
+      })
+    });
   }
 
-  getCurrentGameCategories() {
-    this.catService.getAllGameCategories(this.gameId).then(gc => {
-      const repeatedArray = Array.from({ length: 5 }, () => gc).flat();
-      this.gameCategories = [...repeatedArray]
-      // this.gameCategories = [...gc]
-      console.log(this.gameCategories);
+  async getCurrentGameCategories() {
+    await this.storage.get('gameId').then((res) => {
+      if (res) {
+        this.gameId = res;
+        this.catService.getAllGameCategories(this.gameId).then(gc => {
+          // const repeatedArray = Array.from({ length: 5 }, () => gc).flat();
+          // this.gameCategories = [...repeatedArray]
+          this.gameCategories = [...gc]
+          console.log(this.gameCategories);
 
-      if (this.gameCategories.length === 0) {
-        this.router.navigate(['/board/categories']);
+          if (this.gameCategories.length === 0) {
+            this.router.navigateByUrl('/board/categories');
+          }
+        })
       }
-    })
+    });
   }
 
   doYourThing() {
+    this.gcElements.toArray().forEach(element => {
+      element.nativeElement.style.borderColor = element.nativeElement.style.backgroundColor;
+    });
     let randomNr = Math.floor((Math.random() * 50) + 1);
+    // Count occurrences of each categoryName
+    const categoryNameCounts = this.gameCategories.reduce((counts, gc) => {
+      counts[gc.categoryName] = (counts[gc.categoryName] || 0) + 1;
+      return counts;
+    }, {} as Record<string, number>);
     let finishedGcs = this.gameCategories.filter(gc => gc.finished).map(g => g.categoryId);
-    let soleGcs = this.gameCategories.filter(gc => !gc.finished && !finishedGcs.includes(gc.id ?? ""));
+    // let soleGcs = this.gameCategories.filter(gc => !gc.finished && !finishedGcs.includes(gc.id ?? ""));
+    let soleGcs = this.gameCategories.filter(gc => {
+      // Include only if categoryName is unique and it’s not finished or included in finishedGcs
+      return (
+        categoryNameCounts[gc.categoryName] === 1 &&
+        !gc.finished &&
+        !finishedGcs.includes(gc.id ?? "")
+      );
+    });
     if (soleGcs.length === 0) {
       soleGcs = this.gameCategories.filter(gc => !gc.finished);
     }
     let index = randomNr % soleGcs.length;
     let id = soleGcs[index].id;
+    this.transitionDivBorder(id ?? "");
+  }
+
+  checkWinner() {
+    this.storage.get('currentChallengingGc').then(gc => {
+      this.transitionDivBorder(gc.id);
+    })
+    this.storage.get('currentWinnerId').then(userid => {
+      this.winnerAvailable = false;
+    })
+  }
+
+  transitionDivBorder(id: string) {
     let chosenGcIndex = this.gameCategories.findIndex(g => g.id === id);
     if (chosenGcIndex >= 0) {
       let chosenGc = this.gameCategories[chosenGcIndex];
+      let chosenGcs = this.gameCategories.filter(g => g.categoryName === chosenGc.categoryName);
       let chosenUser = this.users.find(u => u.id === chosenGc.currentUserId);
-      let gcDiv = this.gcElements.toArray()[chosenGcIndex];
-      if (gcDiv && chosenUser) {
-        this.otherCategoryName = chosenGc.categoryName;
-        gcDiv.nativeElement.style.transition = 'border-color 1s ease';
-        gcDiv.nativeElement.style.borderColor = 'gold';
-        // const onTransitionEnd = () => {
-        //   gcDiv.nativeElement.style.borderColor = chosenUser?.color;
-        //   gcDiv.nativeElement.removeEventListener('transitionend', onTransitionEnd);
-        // };
-        // gcDiv.nativeElement.addEventListener('transitionend', onTransitionEnd);
-
+      if (chosenUser) {
         this.currentUser = chosenUser;
+        this.storage.set("currentChallengingGc", chosenGc);
+        this.storage.set("currentChallengingGcIds", chosenGcs.map(g => g.id));
+        chosenGcs.forEach(gc => {
+          this.otherCategoryName = chosenGc.categoryName;
+          let currIndex = this.gameCategories.findIndex(g => g.id === gc.id);
+          let gcDiv = this.gcElements.toArray()[currIndex];
+          if (gcDiv) {
+            gcDiv.nativeElement.style.transition = 'border-color 1s ease';
+            gcDiv.nativeElement.style.borderColor = 'gold';
+            // const onTransitionEnd = () => {
+            //   gcDiv.nativeElement.style.borderColor = chosenUser?.color;
+            //   gcDiv.nativeElement.removeEventListener('transitionend', onTransitionEnd);
+            // };
+            // gcDiv.nativeElement.addEventListener('transitionend', onTransitionEnd);
+
+          }
+        });
       }
+
     }
   }
 
@@ -93,13 +139,20 @@ export class FloorComponent implements OnInit {
       this.toaster.showToast("You need a challenger and a category picked.", 2000, "warning")
       return;
     }
-    this.storage.set("currentGc",this.currentPickedCategory);
-    this.router.navigate(['/duel'], { queryParams: {
-      gameId: this.gameId,
-      otherCategoryName: this.otherCategoryName,
-      challengerId: this.currentUser.id,
-      challengedUserId: this.currentPickedUser?.id,
-    } });
+    this.storage.set("currentPickedGc", this.currentPickedCategory);
+    // All tiles 
+    let surroundingGcIds = this.gameCategories.filter(gc => gc.categoryName === this.currentPickedCategory.categoryName).map(g => g.id);
+    this.storage.set("currentPickedGcIds", surroundingGcIds);
+
+    this.router.navigate(['/duel'], {
+      queryParams: {
+        gameId: this.gameId,
+        otherCategoryName: this.otherCategoryName,
+        challengerId: this.currentUser.id,
+        challengedUserId: this.currentPickedUser?.id,
+      },
+      replaceUrl: true
+    });
 
   }
 }

@@ -70,14 +70,23 @@ export class CategoryService {
     })
   }
 
-  updateGameCategory(gc: GameCategory){
+  async updateGameCategory(gc: GameCategory){
     const gcRef = doc(this.firestore, `gameCategories/${gc.id}`);
     return updateDoc(gcRef, {
       winnerId: gc.winnerId,
       currentUserId: gc.currentUserId,
-      finished: true,
+      finished: gc.finished,
       categoryName: gc.categoryName,
       color: gc.color
+    });
+  }
+
+  async updateGameCategoryById(gcId:string,currentUserId:string,categoryName:string,color:string){
+    const gcRef = doc(this.firestore, `gameCategories/${gcId}`);
+    return updateDoc(gcRef, {
+      currentUserId: currentUserId,
+      categoryName: categoryName,
+      color: color
     });
   }
 }

@@ -81,6 +81,6 @@ export class DivideCategoriesComponent implements OnInit {
 
   async saveAllCategories() {
     await this.catService.addAllCategories(this.gameCategories);
-    await this.router.navigate(['/board']);
+    await this.router.navigateByUrl('/board');
   }
 }

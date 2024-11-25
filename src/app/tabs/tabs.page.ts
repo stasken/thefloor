@@ -4,6 +4,7 @@ import { Game } from '../models/game';
 import { ModalController } from '@ionic/angular';
 import { Timestamp } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -11,10 +12,22 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage implements OnInit {
-  constructor() {
+  constructor(private router: Router) {
   }
   ngOnInit() {
   }
 
-
+  navigateToSettings(){
+    this.router.navigateByUrl('/settings',{
+      replaceUrl : true
+     });
+  }
+  navigateToBoard() {
+    console.log("lol");
+    
+    this.router.navigate(['/board'],{
+      replaceUrl : true,
+      queryParams: {}
+     });
+  }
 }

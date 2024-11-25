@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, Firestore, getDocs, orderBy, query } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, getDocs, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { Game } from '../models/game';
 
 @Injectable({
@@ -30,5 +30,20 @@ export class GamesService {
   addGame(game: Game) {
     const gameRef = collection(this.firestore, "games")
     return addDoc(gameRef, game)
+  }
+
+  startGame(gameId:string) {
+    const userRef = doc(this.firestore, `games/${gameId}`);
+    return updateDoc(userRef, {
+      started: true
+    });
+  }
+
+  updateUser(userId: string,name:string,color:string) {
+    const userRef = doc(this.firestore, `users/${userId}`);
+    return updateDoc(userRef, {
+      name: name,
+      color: color,
+    });
   }
 }

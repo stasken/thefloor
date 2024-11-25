@@ -17,5 +17,5 @@
     />
   </div>
   <h5>{{ user.name }}</h5>
-  <ion-button (click)="saveUser()" [disabled]="!userHasChanged">Save user</ion-button>
+  <ion-button (click)="saveUser()" [disabled]="!userHasChanged || started">Save user</ion-button>
 </div>

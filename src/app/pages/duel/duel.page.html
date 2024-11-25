@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 3
+    <ion-title *ngIf="gameCategory">
+      {{ gameCategory.categoryName }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,8 +9,63 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
+      <ion-title *ngIf="gameCategory" size="large">{{ gameCategory.categoryName }}</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div id="duel-container">
+    <div class="duel-actions">
+      <ion-button fill="outline" color="success" (click)="correctAnswerGiven()">
+        <ion-icon slot="end" name="checkmark"></ion-icon>
+        Correct
+      </ion-button>
+      <ion-button fill="outline" color="danger" (click)="pass()">
+        <ion-icon slot="end" name="close"></ion-icon>
+        Pas
+      </ion-button>
+    </div>
+
+    <div class="main-container">
+      <div class="question-container">
+        <div *ngIf="isFinished">
+          <h2>Proficiat {{ winnerName }}, je hebt gewonnen!</h2>
+          <ion-button fill="outline" color="primary" (click)="finishDuel()">
+            <ion-icon slot="end" name="checkmark-done"></ion-icon>
+            Ga terug
+          </ion-button>
+        </div>
+        <div *ngIf="!currentQuestion && !isFinished">
+          <ion-button fill="outline" color="primary" (click)="initDuel()">
+            <ion-icon slot="end" name="logo-google-playstore"></ion-icon>
+            Start
+          </ion-button>
+        </div>
+        <ng-container *ngIf="currentQuestion && !isFinished">
+          <!-- String question -->
+          <p *ngIf="!currentQuestion.isList&&currentQuestion.question.length>0">{{ currentQuestion.question }}</p>
+
+          <!-- List of strings -->
+          <ul *ngIf="currentQuestion.isList">
+            <li *ngFor="let item of currentQuestion.question.split(';')">{{ item }}</li>
+          </ul>
+
+          <!-- Image question -->
+          <img *ngIf="currentQuestion.isPicture" [src]="'../../assets/questions/'+currentQuestion.path"
+            alt="Question Image" class="question-image" />
+        </ng-container>
+      </div>
+
+      <div class="timers-container">
+        <div *ngIf="challenger" class="timer challenger-timer">
+          <h1>{{ challenger.name }}</h1>
+          <h2>{{ challengerTime }}</h2>
+        </div>
+        <div *ngIf="challengedUser" class="timer challenged-timer">
+          <h1>{{ challengedUser.name }}</h1>
+          <h2>{{ challengedUserTime }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </ion-content>

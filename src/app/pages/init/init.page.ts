@@ -31,8 +31,6 @@ export class InitPage implements OnInit {
   async ngOnInit() {
     this.gamesService.getAllGames().then(games => {
       this.allGames = [...games];
-      console.log(this.allGames);
-      
       this.storage.get('gameId').then(id => {
         const matchedGame = this.allGames.find(game => game.id === id);
         if (matchedGame) {

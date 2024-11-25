@@ -1,0 +1,24 @@
+<div class="game-board">
+  <div #gcElement *ngFor="let category of gameCategories; let i = index" class="game-tile"
+    [ngClass]="{ 'clickable': !category.finished, 'hoverable': !category.finished  }"
+    [style.backgroundColor]="category.color" [style.borderColor]="category.color"
+    (click)="!category.finished && onCategoryClick(category)">
+    {{ category.finished ? "" : category.categoryName }}
+  </div>
+</div>
+<div class="floor-actions">
+  <ion-button class="floor-btn green-btn" fill="outline" color="success" (click)="doYourThing()">
+    <ion-icon slot="end" name="push-outline"></ion-icon>
+    Volgende
+  </ion-button>
+  <div class="floor-actions-info">
+    <p *ngIf="currentUser">{{ currentUser.name }} daagt&nbsp;</p>
+    <p *ngIf="currentPickedUser && currentPickedCategory"> {{ currentPickedUser.name }} uit in categorie {{
+      currentPickedCategory.categoryName }}</p>
+  </div>
+  <ion-button *ngIf="currentUser && currentPickedUser && currentPickedCategory" class="floor-btn red-btn" fill="outline"
+    color="danger" (click)="startDuel()">
+    <ion-icon slot="end" name="people-outline"></ion-icon>
+    Start duel
+  </ion-button>
+</div>

@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/users.service';
   styleUrls: ['./add-users.component.scss'],
 })
 export class AddUsersComponent  implements OnInit {
+  @Input() started: boolean = false;
   users: User[] = [];
   gameId!: string;
 

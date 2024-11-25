@@ -15,7 +15,7 @@
 
   <div id="settings-content">
     <!-- Users -->
-    <app-add-users></app-add-users>
+    <app-add-users [started]="started"></app-add-users>
 
     <!-- Fast Settings -->
 
@@ -26,6 +26,12 @@
 <!-- Actions -->
 <ion-footer>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="solid" (click)="startGame()" [disabled]="started">
+        <ion-icon slot="start" name="caret-forward-circle-outline"></ion-icon>
+        Start
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="secondary">
       <ion-button fill="solid" (click)="logOut()">
         <ion-icon slot="end" name="log-out"></ion-icon>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, Firestore, getDocs, orderBy, query, where } from '@angular/fire/firestore';
+import { addDoc, collection, Firestore, getDocs, orderBy, query, where } from '@angular/fire/firestore';
 import { Question } from '../models/question';
 import { User } from '../models/user';
 
@@ -26,6 +26,25 @@ export class QuestionsService {
     });
 
     return questions;
+  }
+
+  async addQuestion(question: Question) {
+    const questionRef = collection(this.firestore, "questions")
+    return addDoc(questionRef, question)
+  }
+
+  addAllQuestions(questions:Question[]) {
+    questions.forEach(async gc => {
+      await this.addQuestion({
+        categoryId: gc.categoryId,
+        question: gc.question,
+        answer: gc.answer,
+        path: gc.path,
+        order: gc.order,
+        isList:gc.isList,
+        isPicture:gc.isPicture
+      })
+    })
   }
 
 }

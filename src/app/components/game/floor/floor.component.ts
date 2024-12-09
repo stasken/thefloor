@@ -62,7 +62,10 @@ export class FloorComponent implements OnInit {
     });
   }
 
-  doYourThing() {
+  async doYourThing() {
+    if (this.users) {
+      await this.getUsersOfGame();
+    }
     this.gcElements.toArray().forEach(element => {
       element.nativeElement.style.borderColor = element.nativeElement.style.backgroundColor;
     });
@@ -87,11 +90,15 @@ export class FloorComponent implements OnInit {
     }
     let index = randomNr % soleGcs.length;
     let id = soleGcs[index].id;
+    console.log(index);
+    
     this.transitionDivBorder(id ?? "");
   }
 
   checkWinner() {
     this.storage.get('currentChallengingGc').then(gc => {
+      console.log("curr challenging GC: ");
+      console.log(gc);
       this.transitionDivBorder(gc.id);
     })
     this.storage.get('currentWinnerId').then(userid => {
@@ -103,14 +110,22 @@ export class FloorComponent implements OnInit {
     let chosenGcIndex = this.gameCategories.findIndex(g => g.id === id);
     if (chosenGcIndex >= 0) {
       let chosenGc = this.gameCategories[chosenGcIndex];
+      console.log("chosen Gc: ");
+      console.log(chosenGc);
+      
       let chosenGcs = this.gameCategories.filter(g => g.categoryName === chosenGc.categoryName);
+      console.log("chosen GCs same field: ");
+      console.log(chosenGcs);
+      
       let chosenUser = this.users.find(u => u.id === chosenGc.currentUserId);
+      console.log(chosenUser);
+      
       if (chosenUser) {
         this.currentUser = chosenUser;
         this.storage.set("currentChallengingGc", chosenGc);
         this.storage.set("currentChallengingGcIds", chosenGcs.map(g => g.id));
+        this.otherCategoryName = chosenGc.categoryName;
         chosenGcs.forEach(gc => {
-          this.otherCategoryName = chosenGc.categoryName;
           let currIndex = this.gameCategories.findIndex(g => g.id === gc.id);
           let gcDiv = this.gcElements.toArray()[currIndex];
           if (gcDiv) {

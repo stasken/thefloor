@@ -15,7 +15,7 @@
 
   <div id="duel-container">
     <div class="duel-actions">
-      <ion-button fill="outline" color="success" (click)="correctAnswerGiven()">
+      <ion-button fill="outline" [disabled]="userPassed" color="success" (click)="correctAnswerGiven()">
         <ion-icon slot="end" name="checkmark"></ion-icon>
         Correct
       </ion-button>
@@ -58,11 +58,11 @@
       <div class="timers-container">
         <div *ngIf="challenger" class="timer challenger-timer">
           <h1>{{ challenger.name }}</h1>
-          <h2>{{ challengerTime }}</h2>
+          <h2>{{ getDisplayTime(challengerTime) }}</h2>
         </div>
         <div *ngIf="challengedUser" class="timer challenged-timer">
           <h1>{{ challengedUser.name }}</h1>
-          <h2>{{ challengedUserTime }}</h2>
+          <h2>{{ getDisplayTime(challengedUserTime) }}</h2>
         </div>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { CategoriesInfoModalComponent } from 'src/app/modals/categories-info-modal/categories-info-modal.component';
 import { Category } from 'src/app/models/category';
 import { GameCategory } from 'src/app/models/gameCategory';
 import { User } from 'src/app/models/user';
@@ -20,7 +22,7 @@ export class DivideCategoriesComponent implements OnInit {
   requiredCategoryCount = -1;
   categoriesValidated = false;
 
-  constructor(private router: Router, private storage: StorageService, private catService: CategoryService, private userService: UserService) { }
+  constructor(private router: Router, private storage: StorageService, private modalController: ModalController, private catService: CategoryService, private userService: UserService) { }
 
   async ngOnInit() {
     await this.storage.get('gameId').then((res) => {
@@ -35,10 +37,11 @@ export class DivideCategoriesComponent implements OnInit {
   getCategories() {
     let gamecats: GameCategory[] = [];
     this.catService.getAllCategories().then(cats => {
-      let catss = cats.slice(0, 5);
+      let catss = cats;
+      // let catss = cats.slice(0, 10);
       catss.forEach(cat => {
         if (cat && cat.id) {
-          let gc = new GameCategory(this.gameId, cat.id, cat.name, "", "","black");
+          let gc = new GameCategory(this.gameId, 0, cat.id, cat.name, "", "", "black");
           gamecats.push(gc);
         }
       });
@@ -61,6 +64,18 @@ export class DivideCategoriesComponent implements OnInit {
       gc.color = e.detail.value.color;
     }
     this.validateCategories();
+  }
+
+  async checkCategoryInfoModal() {
+    const modal = await this.modalController.create({
+      component: CategoriesInfoModalComponent,
+      componentProps: { gameCategories: this.gameCategories, users: this.users, requiredCategoryCount: this.requiredCategoryCount },
+    });
+
+    modal.onDidDismiss().then((data) => {
+    });
+
+    return await modal.present();
   }
 
   validateCategories() {

@@ -1,5 +1,6 @@
 export class GameCategory {
     id?: string;
+    index: number;
     gameId: string;
     categoryId: string;
     winnerId: string;
@@ -8,9 +9,10 @@ export class GameCategory {
     categoryName:string;
     color: string;
   
-    constructor(gameId:string,categoryId:string,categoryName:string,winnerId:string,currentUserId:string,color:string
+    constructor(gameId:string,index:number,categoryId:string,categoryName:string,winnerId:string,currentUserId:string,color:string
     ) {
       this.gameId = gameId;
+      this.index = index;
       this.categoryId = categoryId;
       this.winnerId = winnerId;
       this.currentUserId = currentUserId;

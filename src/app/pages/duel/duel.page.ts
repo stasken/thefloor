@@ -30,8 +30,9 @@ export class DuelPage implements OnInit, OnDestroy {
   currentQuestionIndex: number = 0;
 
   timerSubscription: Subscription | null = null; // To manage the timer
-  challengerTime: number = 30;
-  challengedUserTime: number = 30;
+  challengerTime: number = 3000;
+  challengedUserTime: number = 3000;
+  userPassed = false;
 
   currentPlayer: 'challenger' | 'challengedUser' = 'challenger';
 
@@ -52,7 +53,7 @@ export class DuelPage implements OnInit, OnDestroy {
       await this.getAllData(challengerId, challengedUserId);
     });
   }
-  
+
   @HostListener('unloaded')
   ngOnDestroy() {
     console.log('ngOnDestroy called');
@@ -61,8 +62,8 @@ export class DuelPage implements OnInit, OnDestroy {
     this.currentQuestion = null;
     this.currentQuestionIndex = 0;
     this.timerSubscription = null; // To manage the timer
-    this.challengerTime = 30;
-    this.challengedUserTime = 30;
+    this.challengerTime = 3000;
+    this.challengedUserTime = 3000;
     this.isFinished = false;
     this.winnerName = "";
   }
@@ -91,7 +92,7 @@ export class DuelPage implements OnInit, OnDestroy {
     // bvvQVpqwcG20lPgkjVz6 Movies
     // 1ghVcJETp1OSac8DPA7J Vlaggen
     // this.questionService.getQuestionsOfCategory(this.categoryId).then(qs => {
-    this.questionService.getQuestionsOfCategory("bvvQVpqwcG20lPgkjVz6").then(qs => {
+    this.questionService.getQuestionsOfCategory("CiW0bBFO9DwPBISnCF2z").then(qs => {
       this.questions = [...qs]
     })
   }
@@ -133,8 +134,10 @@ export class DuelPage implements OnInit, OnDestroy {
   }
 
   pass() {
+    this.userPassed = true;
     setTimeout(() => {
       this.nextQuestion();
+      this.userPassed = false;
     }, 3000);
   }
 
@@ -143,7 +146,7 @@ export class DuelPage implements OnInit, OnDestroy {
       this.timerSubscription.unsubscribe(); // Stop any existing timer
     }
 
-    const timer$ = interval(1000); // Emits every 1 second
+    const timer$ = interval(10); // Emits every 1 second
 
     this.timerSubscription = timer$.subscribe(() => {
       if (player === 'challenger') {
@@ -162,20 +165,33 @@ export class DuelPage implements OnInit, OnDestroy {
     });
   }
 
+  getDisplayTime(time: number): string {
+    if (time >= 500) {
+      // Toon alleen de seconden
+      return Math.floor(time / 100).toString();
+    } else {
+      // Toon seconden met tienden
+      return (time / 100).toFixed(1); // Toont 4.9, 3.2, enz.
+    }
+  }
+
   async duelFinished(challengerWon: boolean) {
     if (challengerWon) {
       this.winnerName = this.challenger.name
       this.winner = this.challenger;
-      this.currentPickedGcIds.forEach(async gcId => {
-        await this.gcService.updateGameCategoryById(gcId,this.winner.id??"",this.otherCategoryName,this.winner.color)
-      });
     } else {
       this.winnerName = this.challengedUser.name
       this.winner = this.challengedUser;
-      this.currentChallengingGcIds.forEach(async gcId => {
-        await this.gcService.updateGameCategoryById(gcId,this.winner.id??"",this.otherCategoryName,this.winner.color)
-      });
     }
+    console.log("Winner: ");
+    console.log(this.winner);
+    console.log(this.winnerName);
+
+    let allGcs = this.currentPickedGcIds.concat(this.currentChallengingGcIds);
+    allGcs.forEach(async gcId => {
+      await this.gcService.updateGameCategoryById(gcId, this.winner.id ?? "", this.otherCategoryName, this.winner.color)
+    });
+
     this.isFinished = true;
     this.gameCategory.finished = true;
     this.gameCategory.winnerId = this.winner.id ?? "";
@@ -189,18 +205,25 @@ export class DuelPage implements OnInit, OnDestroy {
   }
 
   async finishDuel() {
-    this.challengingGameCategory.currentUserId = this.winner.id ?? "";
-    this.challengingGameCategory.color = this.winner.color;
-    this.challengingGameCategory.categoryName = this.otherCategoryName;
-
-    await this.gcService.updateGameCategory(this.challengingGameCategory).then(res => {
+    if (this.challengingGameCategory.currentUserId != this.winner.id) {
+      this.challengingGameCategory.currentUserId = this.winner.id ?? "";
+      this.challengingGameCategory.color = this.winner.color;
+      await this.gcService.updateGameCategory(this.challengingGameCategory).then(res => {
+        this.router.navigate(['/board'], {
+          queryParams: {
+            winner: true,
+          },
+          replaceUrl: true
+        });
+      })
+    } else {
       this.router.navigate(['/board'], {
         queryParams: {
           winner: true,
         },
-        replaceUrl : true
+        replaceUrl: true
       });
-    })
+    }
   }
 
 }

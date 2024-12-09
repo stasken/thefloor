@@ -7,6 +7,7 @@ import { BoardPage } from './board.page';
 import { BoardPageRoutingModule } from './board-routing.module';
 import { DivideCategoriesComponent } from 'src/app/components/game/divide-categories/divide-categories.component';
 import { FloorComponent } from 'src/app/components/game/floor/floor.component';
+import { CategoriesInfoModalComponent } from 'src/app/modals/categories-info-modal/categories-info-modal.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { FloorComponent } from 'src/app/components/game/floor/floor.component';
     FormsModule,
     BoardPageRoutingModule
   ],
-  declarations: [BoardPage, DivideCategoriesComponent,FloorComponent]
+  declarations: [BoardPage, DivideCategoriesComponent,FloorComponent,CategoriesInfoModalComponent]
 })
 export class BoardPageModule {}

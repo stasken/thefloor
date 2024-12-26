@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { StorageService } from './services/storage.service';
 import { QuestionsService } from './services/questions.service';
 import { Question } from './models/question';
+import { CategoryService } from './services/category.service';
 
 
 @Component({
@@ -10,16 +11,43 @@ import { Question } from './models/question';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private storage: StorageService, private questionService: QuestionsService) { }
+  constructor(private storage: StorageService, private questionService: QuestionsService, private catService: CategoryService) { }
 
   async ngOnInit() {
     await this.storage.init();
+    this.catService.getAllCategories().then(res => {
+      console.log(res.length);
+    })
+
   }
 
   async addAllQuestions(questions: Question[]) {
     await this.questionService.addAllQuestions(questions);
   }
 
+
+  // export class Question {
+  //   id?: string;
+  //   categoryId: string;
+  //   question: string;
+  //   answer: string;
+  //   path: string;
+  //   order: number;
+  //   isList:boolean;
+  //   isPicture:boolean;
+
+  //   constructor(categoryId:string,question:string,answer:string,path:string,order:number,isPicture:boolean,isList:boolean
+  //   ) {
+  //     this.categoryId = categoryId;
+  //     this.question = question;
+  //     this.answer = answer;
+  //     this.path = path;
+  //     this.isList = isList;
+  //     this.isPicture = isPicture;
+  //     this.order = order;
+  //   }
+
+  // }
 
   // Generate 50 objects of this.
   // Each of them is a question, so isList and isPicture is false and path is empty.
@@ -29,6 +57,7 @@ export class AppComponent {
   // So generate each time a new simple math question in property question and the answer property answer.
   // The difficulty should be going up. BUt that doesn't mean question 50 should be of difficulty masters degree Math. I think the difficulty of question 50 could be like "5 to the power 3"
   // One important thing is that the question should reabable in 1 maximum 2 seconds. So no long questions
+
   generate50QuestionsForMath() {
     const questions: Question[] = [
       new Question("CiW0bBFO9DwPBISnCF2z", "What is 2 + 2?", "4", "", 1, false, false),
@@ -84,273 +113,59 @@ export class AppComponent {
     ];
   }
 
-
-  // Generate 50 new objects.
-  // Each of them is a picture question, so isList is false and isPicture is true and path is filled in but question is empty.
-  // Order starts at 1, with the most easy one.
-  // The categoryId is "EW0sgwHFCRVTfuAIHqj7"
-  // The questions are pictures of movie covers they need to guess the name of the movie.
-  // So generate each time a new name of a movie and put the answer property answer.
-  // The difficulty should be going up. BUt that doesn't mean question 50 should be of extreme difficulty
-  // The path property is always the same syntax: "animatiefilmcovers/{answer}.png"
-  generate50PictureQuestionsForAnimationMovieCover() {
-    const pictureQuestions: Question[] = [
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Lion King", "animatiefilmcovers/TheLionKing.png", 1, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Toy Story", "animatiefilmcovers/ToyStory.png", 2, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Finding Nemo", "animatiefilmcovers/FindingNemo.png", 3, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Shrek", "animatiefilmcovers/Shrek.png", 4, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Frozen", "animatiefilmcovers/Frozen.png", 5, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Incredibles", "animatiefilmcovers/TheIncredibles.png", 6, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Moana", "animatiefilmcovers/Moana.png", 7, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Coco", "animatiefilmcovers/Coco.png", 8, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Ratatouille", "animatiefilmcovers/Ratatouille.png", 9, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Up", "animatiefilmcovers/Up.png", 10, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "WALL-E", "animatiefilmcovers/WALL-E.png", 11, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Tangled", "animatiefilmcovers/Tangled.png", 12, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Zootopia", "animatiefilmcovers/Zootopia.png", 13, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Jungle Book", "animatiefilmcovers/TheJungleBook.png", 14, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Aladdin", "animatiefilmcovers/Aladdin.png", 15, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Beauty and the Beast", "animatiefilmcovers/BeautyAndTheBeast.png", 16, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Mulan", "animatiefilmcovers/Mulan.png", 17, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Pocahontas", "animatiefilmcovers/Pocahontas.png", 18, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Brave", "animatiefilmcovers/Brave.png", 19, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Little Mermaid", "animatiefilmcovers/TheLittleMermaid.png", 20, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Big Hero 6", "animatiefilmcovers/BigHero6.png", 21, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Cars", "animatiefilmcovers/Cars.png", 22, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Inside Out", "animatiefilmcovers/InsideOut.png", 23, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Monsters, Inc.", "animatiefilmcovers/MonstersInc.png", 24, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "A Bug's Life", "animatiefilmcovers/ABugsLife.png", 25, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Hercules", "animatiefilmcovers/Hercules.png", 26, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Hunchback of Notre Dame", "animatiefilmcovers/TheHunchbackOfNotreDame.png", 27, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Tarzan", "animatiefilmcovers/Tarzan.png", 28, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Treasure Planet", "animatiefilmcovers/TreasurePlanet.png", 29, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Atlantis: The Lost Empire", "animatiefilmcovers/AtlantisTheLostEmpire.png", 30, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Lilo & Stitch", "animatiefilmcovers/LiloAndStitch.png", 31, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Emperor's New Groove", "animatiefilmcovers/TheEmperorsNewGroove.png", 32, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Good Dinosaur", "animatiefilmcovers/TheGoodDinosaur.png", 33, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Secret Life of Pets", "animatiefilmcovers/TheSecretLifeOfPets.png", 34, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Sing", "animatiefilmcovers/Sing.png", 35, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Kung Fu Panda", "animatiefilmcovers/KungFuPanda.png", 36, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Madagascar", "animatiefilmcovers/Madagascar.png", 37, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The Croods", "animatiefilmcovers/TheCroods.png", 38, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Ice Age", "animatiefilmcovers/IceAge.png", 39, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "How to Train Your Dragon", "animatiefilmcovers/HowToTrainYourDragon.png", 40, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Despicable Me", "animatiefilmcovers/DespicableMe.png", 41, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Minions", "animatiefilmcovers/Minions.png", 42, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Happy Feet", "animatiefilmcovers/HappyFeet.png", 43, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Bolt", "animatiefilmcovers/Bolt.png", 44, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Chicken Run", "animatiefilmcovers/ChickenRun.png", 45, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Over the Hedge", "animatiefilmcovers/OverTheHedge.png", 46, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Cloudy with a Chance of Meatballs", "animatiefilmcovers/CloudyWithAChanceOfMeatballs.png", 47, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Hotel Transylvania", "animatiefilmcovers/HotelTransylvania.png", 48, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "The LEGO Movie", "animatiefilmcovers/TheLEGOMovie.png", 49, true, false),
-      new Question("EW0sgwHFCRVTfuAIHqj7", "", "Secret of NIMH", "animatiefilmcovers/SecretOfNIMH.png", 50, true, false),
+  generate50PictureQuestionsForMovies() {
+    const movies = [
+      "Titanic", "The Godfather", "The Shawshank Redemption", "Pulp Fiction", "Inception", "The Dark Knight",
+      "Schindler's List", "Forrest Gump", "Star Wars", "Harry Potter", "The Lord of the Rings", "Avatar",
+      "The Matrix", "Jurassic Park", "Gladiator", "The Lion King", "Frozen", "Toy Story", "Finding Nemo",
+      "The Avengers", "Spider-Man", "Iron Man", "Captain America", "Black Panther", "The Hunger Games",
+      "Twilight", "Pirates of the Caribbean", "The Hobbit", "The Silence of the Lambs", "Saving Private Ryan",
+      "Braveheart", "Interstellar", "La La Land", "The Great Gatsby", "The Social Network", "Cinderella",
+      "Beauty and the Beast", "Aladdin", "Up", "Wall-E", "Shrek", "Minions", "The Incredibles", "Moana",
+      "Coco", "Joker", "Bohemian Rhapsody", "Frozen 2", "Wonder Woman", "Doctor Strange"
     ];
 
+    const categoryId = "AROc3xeHjkCWTgI5boNq";
+    const questions: Question[] = movies.map((movie, index) => {
+      const order = index + 1; // Order starts at 1
+      const path = `films/${movie}.png`;
+      return new Question(categoryId, "", movie, path, order, true, false);
+    });
+    this.addAllQuestions(questions)
   }
 
-
-  // Generate 50 new objects.
-  // Each of them is a list question, so isList is true and isPicture is false and path is empty but question is filled in.
-  // Order starts at 1, with the most easy one.
-  // The categoryId is "RiE9soitDp6MxWjvp8ny"
-  // The questions are 4 hints about a movie, but NO animationmovie, they need to guess the name of the movie. 
-  // So generate each time for a movie a question which has this syntax: 4 hints divided by a semicolon.
-  // PUt the answers and question in dutch
-  // Put the name of the movie in the answer property.
-  // The difficulty should be going up. BUt that doesn't mean question 50 should be of extreme difficulty
-  generate50ListQuestionsForMovies() {
-    const listQuestions: Question[] = [
-      new Question("RiE9soitDp6MxWjvp8ny", "Grote boot; Scheepsramp; Leonardo DiCaprio; IJskoud", "Titanic", "", 1, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Hobbit; Ring; Vrienden; Berg", "The Lord of the Rings", "", 2, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Magie; Brief; Zweinstein; Harry", "Harry Potter", "", 3, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Russel Crowe; Rome; Arena; Strijd", "Gladiator", "", 4, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Schurk; Gotham; Vleermuis; Held", "The Dark Knight", "", 5, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Woestijn; Vrachtwagen; Chaos; Apocalyps", "Mad Max: Fury Road", "", 6, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Schip; Kapitein; Piraat; Somalië", "Captain Phillips", "", 7, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Dinosaurus; Pretpark; Chaos; Vlucht", "Jurassic Park", "", 8, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Auto; Crimineel; Benzine; Familie", "Fast & Furious", "", 9, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Eiland; Bal; Strand; Alleen", "Cast Away", "", 10, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Boerderij; Liefde; Vliegtuigen; Dagboek", "The Notebook", "", 11, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Piano; Oorlog; Getto; Overleven", "The Pianist", "", 12, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Wetenschapper; Tijdmachine; Avontuur; 1985", "Back to the Future", "", 13, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Geheugen; Droom; Slaap; Cobb", "Inception", "", 14, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Jack; Bank; Plan; Overval", "Ocean's Eleven", "", 15, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Ziekenhuis; Verklaring; Dood; Moeder", "The Sixth Sense", "", 16, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Boksring; Handschoenen; Trainer; Philadelphia", "Rocky", "", 17, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Vliegtuig; Tom Cruise; Gevaar; Piloot", "Top Gun", "", 18, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Drugs; Heisenberg; Meth; Kook", "Breaking Bad (film)", "", 19, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Bank; Ontsnappen; Vriendschap; Hoop", "The Shawshank Redemption", "", 20, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Maaltijd; Kwartier; Gangster; Dans", "Pulp Fiction", "", 21, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Oorlog; Normandië; Soldaat; Missie", "Saving Private Ryan", "", 22, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Tijger; Boot; Oceaan; Overleving", "Life of Pi", "", 23, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Hotel; Skiën; Bijl; Overlook", "The Shining", "", 24, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Berlijn; Muur; Spion; Koude Oorlog", "Bridge of Spies", "", 25, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Ruimte; Helm; Robot; Mars", "The Martian", "", 26, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Goud; Tovenaar; Dwergen; Hobbit", "The Hobbit", "", 27, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Sniper; Amerika; Oorlog; Irak", "American Sniper", "", 28, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Boxing; Tactiek; Collage; Prestige", "Million Dollar Baby", "", 29, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Ruimte; Aliens; Uitschakelen; Kolonisten", "Alien", "", 30, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Wraak; Tarantino; Zwaard; Bruid", "Kill Bill", "", 31, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Oorlog; Tank; Nazi; Fury", "Fury", "", 32, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "President; Lincoln; Burgeroorlog; Vrijheid", "Lincoln", "", 33, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Zuid-Afrika; Rugby; Nelson Mandela; Vrijheid", "Invictus", "", 34, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Kans; Waardigheid; Scheikunde; Onrecht", "The Pursuit of Happyness", "", 35, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Gangs; New York; Fictie; Fictie", "Gangs of New York", "", 36, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Titanium; Vlucht; Rede; Woud", "Children of Men", "", 37, false, true),
-      new Question("RiE9soitDp6MxWjvp8ny", "Prison; Long; Battlezone; free-Radical", "Shoshawks", "", 40, false, true),
-    ];
-
-  }
-
-  //
-  generate50MusicQuestionsForJaren90() {
-    const musicQuestions: Question[] = [
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Whitney Houston - I Will Always Love You", "muziekjaren90/Whitney Houston - I Will Always Love You", 3, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Backstreet Boys - I Want It That Way", "muziekjaren90/Backstreet Boys - I Want It That Way", 2, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Nirvana - Smells Like Teen Spirit", "muziekjaren90/Nirvana - Smells Like Teen Spirit", 1, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Britney Spears - ...Baby One More Time", "muziekjaren90/Britney Spears - ...Baby One More Time", 4, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "R.E.M. - Losing My Religion", "muziekjaren90/R.E.M. - Losing My Religion", 5, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Oasis - Wonderwall", "muziekjaren90/Oasis - Wonderwall", 6, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "TLC - No Scrubs", "muziekjaren90/TLC - No Scrubs", 13, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Coolio - Gangsta's Paradise (feat. L.V.)", "muziekjaren90/Coolio - Gangsta's Paradise (feat. L.V.)", 8, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Backstreet Boys - Everybody (Backstreet's Back)", "muziekjaren90/Backstreet Boys - Everybody (Backstreet's Back)", 9, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Shania Twain - Man! I Feel Like A Woman!", "muziekjaren90/Shania Twain - Man! I Feel Like A Woman!", 10, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Celine Dion - My Heart Will Go On (with dialogue from the film)", "muziekjaren90/Celine Dion - My Heart Will Go On (with dialogue from the film)", 11, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Blur - Song 2", "muziekjaren90/Blur - Song 2", 12, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Metallica - Nothing Else Matters", "muziekjaren90/Metallica - Nothing Else Matters", 7, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Fugees - Killing Me Softly With His Song (HQ)", "muziekjaren90/Fugees - Killing Me Softly With His Song (HQ)", 14, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Los Del Rio - Macarena (Bayside Boys Remix)", "muziekjaren90/Los Del Rio - Macarena (Bayside Boys Remix)", 15, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Red Hot Chili Peppers - Under The Bridge", "muziekjaren90/Red Hot Chili Peppers - Under The Bridge", 16, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Fools Garden - Lemon Tree", "muziekjaren90/Fools Garden - Lemon Tree", 17, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Goo Goo Dolls - Iris (Lyrics)", "muziekjaren90/Goo Goo Dolls - Iris (Lyrics)", 18, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Ricky Martin - Livin' La Vida Loca (Lyrics)", "muziekjaren90/Ricky Martin - Livin' La Vida Loca (Lyrics)", 19, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Cher - Believe (First Version) [CC]", "muziekjaren90/Cher - Believe (First Version) [CC]", 20, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Snap! - Rhythm Is a Dancer (original 12)", "muziekjaren90/Snap! - Rhythm Is a Dancer (original 12)", 21, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "No Doubt - Don't Speak", "muziekjaren90/Don't Speak - No Doubt (Lyrics)", 22, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Blackstreet - No Diggity (feat. Dr. Dre & Queen Pen)", "muziekjaren90/Blackstreet - No Diggity New Audio (feat. Dr. Dre & Queen Pen)", 23, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "The Cranberries - Zombie", "muziekjaren90/The Cranberries - Zombie", 24, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Eiffel 65 - Blue (Da Ba Dee) (Lyrics)", "muziekjaren90/Eiffel 65 - Blue (Da Ba Dee) (Lyrics)", 25, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Rage Against The Machine - Killing in the Name", "muziekjaren90/Rage Against The Machine - Killing in the Name", 26, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Lenny Kravitz - Fly Away", "muziekjaren90/Lenny Kravitz - Fly Away", 27, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Vengaboys - Boom, Boom, Boom, Boom!!", "muziekjaren90/Vengaboys - Boom, Boom, Boom, Boom!!", 28, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Seal - Kiss From A Rose (Lyrics)", "muziekjaren90/Seal - Kiss From A Rose (Lyrics)", 29, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Scorpions - Wind of Change with lyrics", "muziekjaren90/Scorpions - Wind of Change with lyrics", 30, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Red Hot Chili Peppers - Californication (Highest Quality)", "muziekjaren90/Red Hot Chili Peppers - Californication (Highest Quality)", 31, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "The Verve - Bitter Sweet Symphony (Lyrics)", "muziekjaren90/The Verve - Bitter Sweet Symphony (Lyrics)", 32, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Rock Heroes - Thunderstruck", "muziekjaren90/Rock Heroes - Thunderstruck", 33, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Underworld - Born Slippy", "muziekjaren90/Underworld - Born Slippy", 34, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Lou Bega - Mambo No. 5 (A Little Bit) (Lyrics Video)", "muziekjaren90/Lou Bega - Mambo No. 5 (A little bit) ( Lyrics Video )", 35, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Vengaboys - Boom, Boom, Boom, Boom!!", "muziekjaren90/Vengaboys - Boom, Boom, Boom, Boom!!", 36, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Waw_Mart - Christina Aguilera - Genie In A Bottle (Lyrics)", "muziekjaren90/Waw_Mart - Christina Aguilera - Genie In A Bottle (Lyrics)", 37, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Lenny Kravitz - Fly Away", "muziekjaren90/Lenny Kravitz - Fly Away", 38, true, true),
-      new Question("PH7wKoQ2v7gKRgkTPKcj", "", "nobody's wife anouk lyrics on screen", "muziekjaren90/nobody's wife anouk lyrics on screen", 39, true, true),
-  ];
-  this.addAllQuestions(musicQuestions);
-    // const musicQuestions: Question[] = [
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "All That She Wants Lyrics - Ace of Base - Lyric Top Song", "muziekjaren90/All That She Wants Lyrics - Ace of Base - Lyric Top Song", 1, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Backstreet Boys - Everybody (Backstreet's Back)", "muziekjaren90/Backstreet Boys - Everybody (Backstreet's Back)", 2, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Backstreet Boys - I Want It That Way", "muziekjaren90/Backstreet Boys - I Want It That Way", 3, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Blackstreet - No Diggity New Audio (feat. Dr. Dre & Queen Pen)", "muziekjaren90/Blackstreet - No Diggity New Audio (feat. Dr. Dre & Queen Pen)", 4, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Blur - Song 2", "muziekjaren90/Blur - Song 2", 5, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Britney Spears - �Baby One More Time", "muziekjaren90/Britney Spears - �Baby One More Time", 6, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Bryan Adams - Summer of 69 (Classic Version)", "muziekjaren90/Bryan Adams - Summer of 69 (Classic Version)", 7, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Celine Dion - My Heart Will Go On (with dialogue from the film)", "muziekjaren90/Celine Dion - My Heart Will Go On (with dialogue from the film)", 8, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Cher - Believe (First Version) [CC]", "muziekjaren90/Cher - Believe (First Version) [CC]", 9, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Coolio - Gangsta's Paradise (feat. L.V.)", "muziekjaren90/Coolio - Gangsta's Paradise (feat. L.V.)", 10, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Culture Beat - Mr. Vain", "muziekjaren90/Culture Beat - Mr. Vain", 11, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Don't Speak - No Doubt (Lyrics)", "muziekjaren90/Don't Speak - No Doubt (Lyrics)", 12, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Eiffel 65 - Blue (Da Ba Dee) (Lyrics)", "muziekjaren90/Eiffel 65 - Blue (Da Ba Dee) (Lyrics)", 13, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Fools Garden - Lemon Tree", "muziekjaren90/Fools Garden - Lemon Tree", 14, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Fugees - Killing Me Softly With His Song (HQ)", "muziekjaren90/Fugees - Killing Me Softly With His Song (HQ)", 15, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Goo Goo Dolls - Iris (Lyrics)", "muziekjaren90/Goo Goo Dolls - Iris (Lyrics)", 16, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Lenny Kravitz - Fly Away", "muziekjaren90/Lenny Kravitz - Fly Away", 17, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Los Del Rio - Macarena (Bayside Boys Remix)", "muziekjaren90/Los Del Rio - Macarena (Bayside Boys Remix)", 18, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Lou Bega - Mambo No. 5 ( A little bit ) ( Lyrics Video )", "muziekjaren90/Lou Bega - Mambo No. 5 ( A little bit ) ( Lyrics Video )", 19, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Metallica - Nothing Else Matters", "muziekjaren90/Metallica - Nothing Else Matters", 20, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Nirvana - Smells Like Teen Spirit", "muziekjaren90/Nirvana - Smells Like Teen Spirit", 21, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Oasis - Wonderwall", "muziekjaren90/Oasis - Wonderwall", 22, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "R.E.M. - Losing My Religion", "muziekjaren90/R.E.M. - Losing My Religion", 23, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Rage Against The Machine - Killing in the Name", "muziekjaren90/Rage Against The Machine - Killing in the Name", 24, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Red Hot Chili Peppers - Californication (Highest Quality)", "muziekjaren90/Red Hot Chili Peppers - Californication (Highest Quality)", 25, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Red Hot Chili Peppers - Under The Bridge", "muziekjaren90/Red Hot Chili Peppers - Under The Bridge", 26, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Ricky Martin - Livin' La Vida Loca (Lyrics)", "muziekjaren90/Ricky Martin - Livin' La Vida Loca (Lyrics)", 27, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Robbie Williams - Angels (Lyrics)", "muziekjaren90/Robbie Williams - Angels (Lyrics)", 28, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Rock Heroes - Thunderstruck", "muziekjaren90/Rock Heroes - Thunderstruck", 29, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Scorpions - Wind of Change with lyrics", "muziekjaren90/Scorpions - Wind of Change with lyrics", 30, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Seal - Kiss From A Rose (Lyrics)", "muziekjaren90/Seal - Kiss From A Rose (Lyrics)", 31, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Shania Twain - Man! I Feel Like A Woman!", "muziekjaren90/Shania Twain - Man! I Feel Like A Woman!", 32, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Snap! - Rhythm Is a Dancer (original 12)", "muziekjaren90/Snap! - Rhythm Is a Dancer (original 12)", 33, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "TLC - No Scrubs", "muziekjaren90/TLC - No Scrubs", 34, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "The Cranberries - Zombie", "muziekjaren90/The Cranberries - Zombie", 35, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "The Verve - Bitter Sweet Symphony (Lyrics)", "muziekjaren90/The Verve - Bitter Sweet Symphony (Lyrics)", 36, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Underworld - Born Slippy", "muziekjaren90/Underworld - Born Slippy", 37, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Vengaboys - Boom, Boom, Boom, Boom!!", "muziekjaren90/Vengaboys - Boom, Boom, Boom, Boom!!", 38, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Waw_Mart - Christina Aguilera - Genie In A Bottle (Lyrics)", "muziekjaren90/Waw_Mart - Christina Aguilera - Genie In A Bottle (Lyrics)", 39, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Whitney Houston - I Will Always Love You", "muziekjaren90/Whitney Houston - I Will Always Love You", 40, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "nobody's wife anouk lyrics on screen", "muziekjaren90/nobody's wife anouk lyrics on screen", 41, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "script", "muziekjaren90/script", 42, true, true),
-    // ];
-
-    // const musicQuestions: Question[] = [
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Nirvana - Smells Like Teen Spirit", "muziekjaren90/Nirvana - Smells Like Teen Spirit", 1, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Oasis - Wonderwall", "muziekjaren90/Oasis - Wonderwall", 2, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Whitney Houston - I Will Always Love You", "muziekjaren90/Whitney Houston - I Will Always Love You", 3, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Coolio - Gangsta's Paradise (feat. L.V.)", "muziekjaren90/Coolio - Gangsta's Paradise (feat. L.V.)", 4, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Celine Dion - My Heart Will Go On (with dialogue from the film)", "muziekjaren90/Celine Dion - My Heart Will Go On (with dialogue from the film)", 5, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Metallica - Nothing Else Matters", "muziekjaren90/Metallica - Nothing Else Matters", 6, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Los Del Rio - Macarena (Bayside Boys Remix)", "muziekjaren90/Los Del Rio - Macarena (Bayside Boys Remix)", 7, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "The Cranberries - Zombie", "muziekjaren90/The Cranberries - Zombie", 8, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Bryan Adams - Summer of 69 (Classic Version)", "muziekjaren90/Bryan Adams - Summer of 69 (Classic Version)", 9, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Backstreet Boys - I Want It That Way", "muziekjaren90/Backstreet Boys - I Want It That Way", 10, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Spice Girls - Wannabe", "muziekjaren90/Spice Girls - Wannabe", 11, true, true), // Not in the original list but iconic
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Snap! - Rhythm Is a Dancer (original 12)", "muziekjaren90/Snap! - Rhythm Is a Dancer (original 12)", 12, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "All That She Wants Lyrics - Ace of Base - Lyric Top Song", "muziekjaren90/All That She Wants Lyrics - Ace of Base - Lyric Top Song", 13, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Fools Garden - Lemon Tree", "muziekjaren90/Fools Garden - Lemon Tree", 14, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Eiffel 65 - Blue (Da Ba Dee) (Lyrics)", "muziekjaren90/Eiffel 65 - Blue (Da Ba Dee) (Lyrics)", 15, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Cher - Believe (First Version) [CC]", "muziekjaren90/Cher - Believe (First Version) [CC]", 16, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Blur - Song 2", "muziekjaren90/Blur - Song 2", 17, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Goo Goo Dolls - Iris (Lyrics)", "muziekjaren90/Goo Goo Dolls - Iris (Lyrics)", 18, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Culture Beat - Mr. Vain", "muziekjaren90/Culture Beat - Mr. Vain", 19, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Lou Bega - Mambo No. 5 ( A little bit ) ( Lyrics Video )", "muziekjaren90/Lou Bega - Mambo No. 5 ( A little bit ) ( Lyrics Video )", 20, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "R.E.M. - Losing My Religion", "muziekjaren90/R.E.M. - Losing My Religion", 21, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Ricky Martin - Livin' La Vida Loca (Lyrics)", "muziekjaren90/Ricky Martin - Livin' La Vida Loca (Lyrics)", 22, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "TLC - No Scrubs", "muziekjaren90/TLC - No Scrubs", 23, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Red Hot Chili Peppers - Californication (Highest Quality)", "muziekjaren90/Red Hot Chili Peppers - Californication (Highest Quality)", 24, true, true),
-    //   new Question("PH7wKoQ2v7gKRgkTPKcj", "", "Seal - Kiss From A Rose (Lyrics)", "muziekjaren90/Seal - Kiss From A Rose (Lyrics)", 25, true, true),
-    //   // Remaining entries would follow based on decreasing recognition
-    // ];
-  }
-
-  ////// VALLY //////
   generate50PictureQuestionsForCarBrands() {
     const carBrands = [
-      "Toyota", "Ford", "Chevrolet", "Honda", "Nissan", "BMW", "Mercedes-Benz", "Audi", "Volkswagen", "Hyundai",
-      "Kia", "Peugeot", "Renault", "Fiat", "Subaru", "Mazda", "Lexus", "Abarth", "Porsche", "Jaguar",
-      "Volvo", "Mitsubishi", "Tesla", "Daewoo", "Ferrari", "Lamborghini", "Aston-Martin", "Bentley", "Rolls-Royce", "Bugatti",
-      "McLaren", "Alfa-Romeo", "Cadillac", "Dodge", "Corvette", "Koenigsegg", "Infiniti", "Smart", "Suzuki", "Seat",
-      "Skoda", "Mini-cooper", "Saab", "Subaru", "Mustang", "Opel", "Citroën", "Pontiac", "Buick", "Smart"
+      "BMW", "Mercedes-Benz", "Audi", "Toyota", "Ford", "Honda", "Nissan", "Opel", "Citroën", "Volkswagen", "Volvo", "Hyundai",
+      "Kia", "Peugeot", "Renault", "Fiat", "Subaru", "Mazda", "Lexus", "Abarth", "Porsche", "Jaguar", "Chevrolet",
+      "Mitsubishi", "Tesla", "Daewoo", "Ferrari", "Lamborghini", "Aston-Martin", "Bentley", "Rolls-Royce", "Bugatti",
+      "McLaren", "Alfa-Romeo", "Cadillac", "Dodge", "Corvette", "Koenigsegg", "Infiniti", "Maserati", "Suzuki", "Seat",
+      "Skoda", "Mini-cooper", "Saab", "Subaru", "Mustang", , "Pontiac", "Buick", "Smart"
     ];
 
     const categoryId = "kt9zIP8tqjIuAqhjn6Rx";
     const questions: Question[] = carBrands.map((brand, index) => {
-      const order = index + 1; // Order starts at 1
-      const path = `automerken/${brand}.png`;
-      return new Question(categoryId, "", brand, path, order, true, false);
+      if (brand) {
+        const order = index + 1; // Order starts at 1
+        let lcbrand = brand.toLowerCase();
+        const path = `automerken/${lcbrand}.png`;
+        return new Question(categoryId, "", brand, path, order, true, false);
+      } else {
+        const order = index + 1; // Order starts at 1
+        const path = `automerken/${"xx"}.png`;
+        return new Question(categoryId, "", "x", path, order, true, false);
+      }
+
     });
+    this.addAllQuestions(questions)
   }
 
   generate50PictureQuestionsForAnimals() {
     const animals = [
-      // Makkelijke dieren (1-15)
       "Hond", "Kat", "Paard", "Koe", "Schaap", "Varken", "Kip", "Konijn", "Goudvis", "Olifant",
       "Leeuw", "Tijger", "Zebra", "Giraf", "Pinguïn",
-
-      // Minder makkelijke dieren (16-35)
       "Flamingo", "Dolfijn", "Schildpad", "Kameleon", "Toekan", "Alpaca", "Stekelvarken", "Wasbeer", "Egel", "Bever",
       "Miereneter", "Reuzenpanda", "Zwaardvis", "Kolibrie", "Ringstaartmaki", "Emoe", "Zeehond", "IJsbeer", "Coati", "Walrus",
-
-      // Moeilijker maar niet té moeilijk (36-50)
       "Tapir", "Mara", "Capibara", "Gibbon", "Bonobo", "Axolotl", "Quokka", "Narwal", "Kakapo", "Manenwolf",
       "Fossa", "Blauwvinvis", "Saiga-antilope", "Shoebill", "Tarsier"
     ];
@@ -361,18 +176,19 @@ export class AppComponent {
       const path = `dieren/${animal}.png`;
       return new Question(categoryId, "", animal, path, order, true, false);
     });
+
   }
 
   generate50PictureQuestionsForMonuments() {
     const monuments = [
-      "Eiffeltoren", "Vrijheidsbeeld", "Taj Mahal", "Colosseum", "Chichen Itza", "De Grote Muur van China",
-      "Piramide van Giza", "Stonehenge", "Sagrada Familia", "Acropolis van Athene", "Christus de Verlosser",
-      "Machu Picchu", "Neuschwanstein Castle", "Petra", "Sydney Opera House", "Moai Beelden", "Alhambra",
-      "Big Ben", "Tower Bridge", "Pantheon", "Piramide van Teotihuacan", "Kremlin", "Palace of Versailles",
-      "Mount Rushmore", "Angkor Wat", "La Sagrada Familia", "Rijksmuseum", "Eiffel Tower", "Notre-Dame", "Brandenburger Tor",
-      "Burg Eltz", "Palace of Potala", "Baalbek Ruins", "Parthenon", "Red Square", "Grand Canyon", "Great Barrier Reef",
-      "Mount Fuji", "Basilica di San Pietro", "Louvre Museum", "Château de Chambord", "Banff National Park", "Machu Picchu",
-      "Easter Island", "Machu Picchu", "Neuschwanstein Castle", "Christ the Redeemer", "Mount Kilimanjaro", "Blue Mosque"
+      "Eiffeltoren", "Colosseum", "Vrijheidsbeeld", "Taj Mahal", "Sagrada Familia", "Notre-Dame", "Big Ben",
+      "Tower Bridge", "Palace of Versailles", "Louvre Museum", "De Grote Muur van China", "Piramide van Giza",
+      "Acropolis van Athene", "Christus de Verlosser", "Stonehenge", "Angkor Wat", "Brandenburger Tor", "Sydney Opera House",
+      "Neuschwanstein Castle", "Mount Fuji", "Petra", "Château de Chambord", "Red Square", "Alhambra", "Pantheon",
+      "Parthenon", "Grand Canyon", "Mount Rushmore", "Rijksmuseum", "Chichen Itza", "Blue Mosque", "Basilica di San Pietro",
+      "Great Barrier Reef", "Moai Beelden", "Easter Island", "Palace of Potala", "Mount Kilimanjaro", "Banff National Park",
+      "Burg Eltz", "Piramide van Teotihuacan", "Kremlin", "Machu Picchu", "Baalbek Ruins"
+
     ];
 
     const categoryId = "u4bSDQHebrdSR4PPN8xS";
@@ -381,18 +197,20 @@ export class AppComponent {
       const path = `monumenten/${monument}.png`;
       return new Question(categoryId, "", monument, path, order, true, false);
     });
+    this.addAllQuestions(questions);
   }
 
   generate50PictureQuestionsForSportLegends() {
     const sportLegends = [
-      "Michael Jordan", "Muhammad Ali", "Cristiano Ronaldo", "Lionel Messi", "Serena Williams", "Emma Meesseman",
-      "Tiger Woods", "LeBron James", "Julie Vanloo", "Roger Federer", "Kobe Bryant", "Sachin Tendulkar", "Mia Hamm",
-      "Tom Brady", "Shaquille O'Neal", "Rafael Nadal", "Andre Agassi", "David Beckham", "Michael Phelps",
-      "Jack Nicklaus", "Diego Maradona", "Wayne Gretzky", "Larry Bird", "Billie Jean King", "Carl Lewis",
-      "Nadia Comaneci", "Simone Biles", "Usain Bolt", "Arnold Schwarzenegger", "Mark Spitz", "Steffi Graf",
-      "Jimmy Connors", "Martina Navratilova", "Allyson Felix", "Danica Patrick", "Sergey Bubka", "Vladimir Klitschko",
-      "Kareem Abdul-Jabbar", "Babe Ruth", "Wilt Chamberlain", "Michael Schumacher", "Mick Doohan", "Pele",
-      "Jackie Robinson", "Carlton Fisk", "Cathy Freeman", "Yogi Berra", "Lou Gehrig", "Bobby Orr", "Jerry Rice"
+      "Michael Jordan", "Cristiano Ronaldo", "Lionel Messi", "Roger Federer", "Serena Williams", "Tiger Woods",
+      "LeBron James", "Rafael Nadal", "David Beckham", "Michael Schumacher", "Usain Bolt", "Muhammad Ali",
+      "Diego Maradona", "Pele", "Simone Biles", "Tom Brady", "Nadia Comaneci", "Emma Meesseman", "Julie Vanloo",
+      "Andre Agassi", "Kobe Bryant", "Michael Phelps", "Shaquille O'Neal", "Billie Jean King", "Martina Navratilova",
+      "Steffi Graf", "Larry Bird", "Jack Nicklaus", "Wayne Gretzky", "Carl Lewis", "Mia Hamm", "Arnold Schwarzenegger",
+      "Sachin Tendulkar", "Allyson Felix", "Mark Spitz", "Babe Ruth", "Kareem Abdul-Jabbar", "Wilt Chamberlain",
+      "Vladimir Klitschko", "Danica Patrick", "Cathy Freeman", "Jackie Robinson", "Lou Gehrig", "Yogi Berra",
+      "Jerry Rice", "Carlton Fisk", "Bobby Orr", "Jimmy Connors", "Mick Doohan", "Sergey Bubka"
+
     ];
 
     const categoryId = "Gj2KBLjMD3uLAwBkbC2o";
@@ -401,8 +219,118 @@ export class AppComponent {
       const path = `sportfiguren/${legend}.png`;
       return new Question(categoryId, "", legend, path, order, true, false);
     });
+    this.addAllQuestions(questions);
   }
 
+  generate50PictureQuestionsForVlaggen() {
+    const vlaggen = [
+      "België", "Nederland", "Frankrijk", "Duitsland", "Spanje", "Italië", "Verenigd Koninkrijk", "Luxemburg", "Zwitserland", "Oostenrijk",
+      "Verenigde Staten", "Canada", "Portugal", "Griekenland", "Denemarken", "Zweden", "Noorwegen", "Finland", "Ierland", "Turkije",
+      "Japan", "China", "Australië", "Rusland", "Brazilië", "India", "Zuid-Afrika", "Mexico", "Egypte", "Argentinië",
+      "Thailand", "Polen", "Tsjechië", "Hongarije", "Roemenië", "Singapore", "Marokko", "Indonesië", "Maleisië", "Nieuw-Zeeland",
+      "Kroatië", "Vaticaanstad", "IJsland", "Cuba", "Vietnam", "Sri Lanka", "Filipijnen", "Peru", "Chili", "Colombia"
+    ];
+
+    const afk = [
+      "be", "nl", "fr", "de", "es", "it", "uk", "lu", "ch", "at",
+      "us", "ca", "pt", "gr", "dk", "se", "no", "fi", "ie", "tr",
+      "jp", "cn", "au", "ru", "br", "in", "za", "mx", "eg", "ar",
+      "th", "pl", "cz", "hu", "ro", "sg", "ma", "id", "my", "nz",
+      "hr", "va", "is", "cu", "vn", "lk", "ph", "pe", "cl", "co"
+
+    ]
+
+    const categoryId = "1ghVcJETp1OSac8DPA7J";
+    const questions: Question[] = vlaggen.map((sign, index) => {
+      const order = index + 1; // Order starts at 1
+      const path = `vlaggen/${afk[index]}.png`;
+      return new Question(categoryId, "", sign, path, order, true, false);
+    });
+    this.addAllQuestions(questions)
+  }
+
+  generate50PictureQuestionsForArtists() {
+    const artists = [
+      "Michael Jackson", "Queen", "The Beatles", "Coldplay", "Ed Sheeran", "Beyoncé", "Rihanna",
+      "Adele", "Taylor Swift", "Eminem", "Bruno Mars", "The Rolling Stones", "Kanye West", "Justin Bieber",
+      "Lady Gaga", "The Weeknd", "Ariana Grande", "Linkin Park", "Foo Fighters", "Green Day", "Imagine Dragons",
+      "Shawn Mendes", "Dua Lipa", "Billie Eilish", "U2", "Metallica", "Red Hot Chili Peppers", "Nirvana",
+      "Oasis", "Blink-182", "The Killers", "Maroon 5", "Kings of Leon", "OneRepublic", "Avicii", "Sam Smith",
+      "Post Malone", "Harry Styles", "David Guetta", "Calvin Harris", "Ellie Goulding", "Sia", "The Script",
+      "Florence + The Machine", "Mumford & Sons", "Arctic Monkeys", "Selena Gomez", "The Chainsmokers",
+      "Major Lazer", "Kygo", "Drake"
+    ];
+
+    const categoryId = "KE6s30W1Oqt9mJrAZdV2";
+    const questions: Question[] = artists.map((artist, index) => {
+      const order = index + 1; // Order starts at 1
+      const path = `artiesten/${artist}.png`;
+      return new Question(categoryId, "", artist, path, order, true, false);
+    });
+  }
+
+  generate50PictureQuestionsForSports() {
+    const sportsQuestions = [
+      { question: "Hoeveel spelers staan er op een voetbalveld per team?", answer: "11" },
+      { question: "Hoeveel ringen staan er in het Olympische logo?", answer: "5" },
+      { question: "Welke kleur heeft de finishvlag in de Formule 1?", answer: "Zwart-wit geblokt" },
+      { question: "Welke sport speelt Lionel Messi?", answer: "Voetbal" },
+      { question: "Wat is de bijnaam van Michael Jordan?", answer: "Air Jordan" },
+      { question: "Hoeveel punten is een driepunter waard in basketbal?", answer: "3" },
+      { question: "Welke sport wordt gespeeld op Wimbledon?", answer: "Tennis" },
+      { question: "Wat is de maximale score in een enkel frame van bowling?", answer: "300" },
+      { question: "Hoe heet de internationale voetbalorganisatie?", answer: "FIFA" },
+      { question: "In welke sport scoor je een hole-in-one?", answer: "Golf" },
+      { question: "Hoe heet de grootste wielerwedstrijd ter wereld?", answer: "Tour de France" },
+      { question: "Welke sport speelt Novak Djokovic?", answer: "Tennis" },
+      { question: "Hoeveel halve cirkels zijn er op een basketbalveld?", answer: "2" },
+      { question: "Welke sport speelt LeBron James?", answer: "Basketbal" },
+      { question: "Hoeveel minuten duurt een rugbywedstrijd?", answer: "80" },
+      { question: "Welke sport speelt Serena Williams?", answer: "Tennis" },
+      { question: "Hoe heet de beroemdste Belgische wielrenner ooit?", answer: "Eddy Merckx" },
+      { question: "Welke sport speelt Tom Brady?", answer: "American Football" },
+      { question: "In welke sport gebruik je een shuttle?", answer: "Badminton" },
+      { question: "Hoe heet de Belgische nationale voetbalploeg?", answer: "De Rode Duivels" },
+      { question: "Wat is de bijnaam van Usain Bolt?", answer: "Lightning Bolt" },
+      { question: "Hoeveel keer heeft Rafael Nadal Roland Garros gewonnen?", answer: "14" },
+      { question: "Hoeveel spelers zijn er in een volleybalteam op het veld?", answer: "6" },
+      { question: "Welke sport speelt Kevin De Bruyne?", answer: "Voetbal" },
+      { question: "Wat betekent het Engelse woord 'strike' in bowlen?", answer: "Alle kegels in één worp omvergooien" },
+      { question: "In welke sport is Lewis Hamilton bekend?", answer: "Formule 1" },
+      { question: "Hoeveel sets moet je winnen in een grandslamfinale bij tennis (mannen)?", answer: "3" },
+      { question: "Hoeveel gaatjes heeft een standaard golfbaan?", answer: "18" },
+      { question: "Hoeveel seconden krijg je in basketbal om de bal over de middenlijn te brengen?", answer: "8" },
+      { question: "Welke sport wordt gespeeld in de NBA?", answer: "Basketbal" },
+      { question: "In welke sport wordt een puck gebruikt?", answer: "IJshockey" },
+      { question: "Hoeveel keer heeft Michael Schumacher het F1-kampioenschap gewonnen?", answer: "7" },
+      { question: "Hoeveel spelers staan er op het veld bij hockey per team?", answer: "11" },
+      { question: "Wat betekent een 'perfect game' in bowlen?", answer: "300 punten scoren" },
+      { question: "Hoeveel keer heeft België een WK-voetbalfinale gespeeld?", answer: "Geen" },
+      { question: "Hoe lang duurt een halve voetbalwedstrijd?", answer: "45 minuten" },
+      { question: "Hoe heet de trofee voor de winnaar van de Tour de France?", answer: "De gele trui" },
+      { question: "Wat is de snelste zwemslag?", answer: "Vrije slag" },
+      { question: "Hoeveel jaar duurt het tussen de Olympische Spelen?", answer: "4" },
+      { question: "Welke sport speelt Cristiano Ronaldo?", answer: "Voetbal" },
+      { question: "Hoe heet de beroemde Amerikaanse ijshockeycompetitie?", answer: "NHL" },
+      { question: "Welke sport gebruikt de term 'love' voor nul punten?", answer: "Tennis" },
+      { question: "Hoeveel punten is een touchdown waard in American Football?", answer: "6" },
+      { question: "Hoeveel spelers zijn er in een waterpoloteam?", answer: "7" },
+      { question: "Hoe heet het toernooi dat Novak Djokovic vaak wint?", answer: "Australian Open" },
+      { question: "Hoeveel medailles heeft Phelps gewonnen op de Olympische Spelen?", answer: "28" },
+      { question: "Welke sport speelt Kylian Mbappé?", answer: "Voetbal" },
+      { question: "Hoe heet de Belgische wielerklassieker met kasseien?", answer: "Ronde van Vlaanderen" }
+    ];
+
+    const categoryId = "4EHHmQ8zicTylfvcIDt3";
+    const questions: Question[] = sportsQuestions.map((q, index) => {
+      const order = index + 1; // Order starts at 1
+      return new Question(categoryId, q.question, q.answer, "", order, false, false);
+    });
+    this.addAllQuestions(questions)
+    return questions;
+  }
+
+  // NOT DONE
   generate50PictureQuestionsForLogos() {
     const logos = [
       "Nike", "Adidas", "Apple", "McDonald's", "CocaCola", "Pepsi", "Samsung", "Microsoft", "Google", "Facebook",
@@ -421,5 +349,70 @@ export class AppComponent {
     });
 
   }
-}
 
+  generate50PictureQuestionsForAnagrams() {
+    const anagrams = [
+      { question: "EEN", answer: "NEE" },
+      { question: "RAT", answer: "ART" },
+      { question: "KOE", answer: "OKE" },
+      { question: "TON", answer: "NOT" },
+      { question: "EIK", answer: "KIE" },
+      { question: "NAT", answer: "TAN" },
+      { question: "NET", answer: "TEN" },
+      { question: "TAS", answer: "SAT" },
+      { question: "MAN", answer: "NAM" },
+      { question: "KAT", answer: "TAK" },
+      { question: "AAN", answer: "ANA" },
+      { question: "HAL", answer: "LAH" },
+      { question: "BAN", answer: "NAB" },
+      { question: "PAN", answer: "NAP" },
+      { question: "BOEK", answer: "KOEB" },
+      { question: "KAAS", answer: "SAKA" },
+      { question: "BOOM", answer: "MOOB" },
+      { question: "LEEN", answer: "NEEL" },
+      { question: "MEER", answer: "REEM" },
+      { question: "DOOR", answer: "ROOD" },
+      { question: "LAMP", answer: "MALP" },
+      { question: "RAAM", answer: "AMAR" },
+      { question: "TUIN", answer: "UNIT" },
+      { question: "HOUT", answer: "TOUH" },
+      { question: "BLOK", answer: "KLOB" },
+      { question: "DIJK", answer: "KDIJ" },
+      { question: "LAND", answer: "NDAL" },
+      { question: "TROTS", answer: "STORT" },
+      { question: "STORM", answer: "MORTS" },
+      { question: "TIJGER", answer: "GERTIJ" },
+      { question: "KAMER", answer: "MERAK" },
+      { question: "BOEKEN", answer: "KENBOE" },
+      { question: "VELDEN", answer: "DELVEN" },
+      { question: "BRAND", answer: "BARND" },
+      { question: "KLANK", answer: "KNALK" },
+      { question: "ZWAAI", answer: "WAIZ" },
+      { question: "STROOP", answer: "PORTOS" },
+      { question: "BASTEN", answer: "BESTAN" },
+      { question: "KRANEN", answer: "REKANN" },
+      { question: "PLANKEN", answer: "ANKELPN" },
+      { question: "BERICHT", answer: "RICHTEB" },
+      { question: "SCHADUW", answer: "WUCHADS" },
+      { question: "DOCHTER", answer: "TERDOCH" },
+      { question: "BOODSCHAP", answer: "HAPSCODBO" },
+      { question: "GEMAKKELIJK", answer: "KEGLIJAKKEM" },
+      { question: "DRAADLOOS", answer: "RAADSDOOL" },
+      { question: "VERKEERD", answer: "DREKERVE" },
+      { question: "MISLEIDEND", answer: "DEINDLIMES" },
+      { question: "VERSPREIDING", answer: "SPEERDIRVING" },
+      { question: "ONGELOOFLIJK", answer: "KOFLUNLOIGEJ" }
+    ];
+
+    const categoryId = "RiE9soitDp6MxWjvp8ny";
+    const questions: Question[] = anagrams.map((a, index) => {
+      const order = index + 1; // Order starts at 1
+      const path = `anagrammen/${index + 1}.png`; // Dynamically generate path if needed
+      return new Question(categoryId, a.question.toUpperCase(), a.answer.toUpperCase(), path, order, false, false);
+    });
+
+    return questions;
+  }
+
+  
+}

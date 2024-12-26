@@ -45,13 +45,16 @@
           <p *ngIf="!currentQuestion.isList&&currentQuestion.question.length>0">{{ currentQuestion.question }}</p>
 
           <!-- List of strings -->
-          <ul *ngIf="currentQuestion.isList">
+          <ul *ngIf="currentQuestion.isList && !currentQuestion.isPicture">
             <li *ngFor="let item of currentQuestion.question.split(';')">{{ item }}</li>
           </ul>
 
           <!-- Image question -->
-          <img *ngIf="currentQuestion.isPicture" [src]="'../../assets/questions/'+currentQuestion.path"
-            alt="Question Image" class="question-image" />
+          <img *ngIf="currentQuestion.isPicture && !currentQuestion.isList"
+            [src]="'../../assets/questions/'+currentQuestion.path" alt="Question Image" class="question-image" />
+
+          <p *ngIf="currentQuestion.isList&&currentQuestion.isList">Luister</p>
+
         </ng-container>
       </div>
 

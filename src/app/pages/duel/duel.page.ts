@@ -4,6 +4,7 @@ import { interval, Subscription } from 'rxjs';
 import { GameCategory } from 'src/app/models/gameCategory';
 import { Question } from 'src/app/models/question';
 import { User } from 'src/app/models/user';
+import { AudioService } from 'src/app/services/audio.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -40,7 +41,9 @@ export class DuelPage implements OnInit, OnDestroy {
   winnerName: string = "";
   winner!: User;
 
-  constructor(private route: ActivatedRoute, private router: Router, private storage: StorageService, private questionService: QuestionsService, private gcService: CategoryService, private userService: UserService) { }
+  isAudioRound = false;
+
+  constructor(private route: ActivatedRoute, private router: Router, private audio: AudioService, private storage: StorageService, private questionService: QuestionsService, private gcService: CategoryService, private userService: UserService) { }
 
   ngOnInit(): void {
     console.log('ngOnInit called');
@@ -94,6 +97,19 @@ export class DuelPage implements OnInit, OnDestroy {
     // this.questionService.getQuestionsOfCategory(this.categoryId).then(qs => {
     this.questionService.getQuestionsOfCategory("CiW0bBFO9DwPBISnCF2z").then(qs => {
       this.questions = [...qs]
+      if (this.questions[0].isList && this.questions[0].isPicture) {
+        this.isAudioRound = true;
+        this.getAllAudios();
+      }
+    })
+  }
+  
+
+  getAllAudios() {
+    let path = '../assets/questions/';
+    this.questions.forEach(q => {
+      let fullPath = `${path}${q.path}.mp3`
+      this.audio.preload(q.answer, fullPath);
     })
   }
 
@@ -111,6 +127,9 @@ export class DuelPage implements OnInit, OnDestroy {
 
   initDuel() {
     this.currentQuestion = this.questions[this.currentQuestionIndex];
+    if (this.isAudioRound) {
+      this.audio.play(this.currentQuestion.answer);
+    }
     this.startTimer(this.currentPlayer);
   }
 
@@ -120,6 +139,9 @@ export class DuelPage implements OnInit, OnDestroy {
       this.currentQuestionIndex = 0;
     }
     this.currentQuestion = this.questions[this.currentQuestionIndex];
+    if (this.isAudioRound) {
+      this.audio.play(this.currentQuestion.answer);
+    }
   }
 
   correctAnswerGiven() {

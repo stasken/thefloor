@@ -17,16 +17,17 @@ options.add_argument("--disable-notifications")
 
 path='C:\\Users\\arno_\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe'
 
-monuments = [
-      "Mickey Mouse", "Donald Duck", "Bugs Bunny", "Tom (Tom en Jerry)",  "Nemo (Finding Nemo)",
-      "SpongeBob", "Scooby-Doo", "Samson (Samson & Gert)", "Mega Mindy", "Jerry (Tom en Jerry)", "Daffy Duck",
-      "Plop (Kabouter Plop)", "Grote Smurf (De Smurfen)", "Maya de Bij",  "Olaf (Frozen)",
-      "Bumba", "Piet Piraat", "Dora", "Elsa (Frozen)", "Goofy", "Marge Simpson (The Simpsons)", 
-      "Anna (Frozen)", "Simba (The Lion King)", "Dory (Finding Nemo)",  "Gargamel (De Smurfen)","Timon (The Lion King)", "Woody Woodpecker", "Garfield", 
-       "Woody (Toy Story)", "Buzz Lightyear (Toy Story)", "Shrek", "Fiona (Shrek)", "Peppa Pig", "Pumbaa (The Lion King)", "Pikachu","Ash Ketchum (Pokémon)",
-      "Gru (Despicable Me)", "Marlin (Finding Nemo)", "Belle (Belle en het Beest)", 
-      "Rapunzel (Tangled)", "Ariel (De Kleine Zeemeermin)", "WALL-E", "Bluey", "Taz", 
-      "Shaun het Schaap", "Winnie de Pooh","Tweety", "Elmer Fudd"
+bodyParts = [
+        "Alexander De Croo", "Bart De Wever", "Elio Di Rupo", "Maggie De Block", "Charles Michel",
+        "Sophie Wilmès", "Paul Magnette", "Georges-Louis Bouchez", "Theo Francken", "Conner Rousseau",
+        "Angela Merkel", "Barack Obama", "Emmanuel Macron", "Justin Trudeau", "Boris Johnson",
+        "Joe Biden", "Donald Trump", "Vladimir Putin", "Jacinda Ardern", "Recep Tayyip Erdoğan",
+        "Xi Jinping", "Jair Bolsonaro", "Narendra Modi", "Shinzo Abe", "Yasser Arafat",
+        "Golda Meir", "Indira Gandhi", "Mahatma Gandhi", "Benazir Bhutto", "Fidel Castro",
+        "Che Guevara", "Hugo Chávez", "Eva Perón", "Juan Perón", "François Mitterrand",
+        "Helmut Kohl", "Konrad Adenauer", "Charles de Gaulle", "Tony Blair", "David Cameron",
+        "Matteo Renzi", "Silvio Berlusconi", "Nicolas Sarkozy", "Theresa May", "Jacques Chirac",
+        "Winston Churchill", "Franklin D. Roosevelt", "John F. Kennedy", "Ronald Reagan", "Nelson Mandela"
     ];
 
 
@@ -60,12 +61,12 @@ def fetch_and_save_image(query):
         print(f"First valid image URL: {valid_img_urls[0]}")
         import requests 
         response = requests.get(valid_img_urls[0])
-        file_path = f"animatiefiguren/{query}.png"
+        file_path = f"politiekers/{query.replace(" ", "_")}.png"
         with open(file_path, "wb") as file:
             file.write(response.content)
 
 if __name__ == "__main__":
-    for dier in monuments:
+    for dier in bodyParts:
         fetch_and_save_image(dier)
 
 # Close the browser

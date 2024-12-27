@@ -6,25 +6,27 @@ import time
 
 # Setup Chrome options (headless if needed)
 options = webdriver.ChromeOptions()
-# options.add_argument("--headless")  # Remove this line if you want to see the browser
+options.add_argument("--headless")  # Remove this line if you want to see the browser
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--disable-notifications")  # Disable notification prompts
 options.add_argument("--disable-extensions")  # Disable extensions that might interfere
-options.add_argument("--disable-popup-blocking")  # Prevent popup blocking
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+options.add_argument("--disable-popup-blocking")
+options.add_argument("--disable-notifications")
 
 path='C:\\Users\\arno_\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe'
 
 monuments = [
-        "Michael Jackson", "Queen", "The Beatles", "Coldplay", "Ed Sheeran", "Beyoncé", "Rihanna",
-        "Adele", "Taylor Swift", "Eminem", "Bruno Mars", "The Rolling Stones", "Kanye West", "Justin Bieber",
-        "Lady Gaga", "The Weeknd", "Ariana Grande", "Linkin Park", "Foo Fighters", "Green Day", "Imagine Dragons",
-        "Shawn Mendes", "Dua Lipa", "Billie Eilish", "U2", "Metallica", "Red Hot Chili Peppers", "Nirvana", 
-        "Oasis", "Blink-182", "The Killers", "Maroon 5", "Kings of Leon", "OneRepublic", "Avicii", "Sam Smith", 
-        "Post Malone", "Harry Styles", "David Guetta", "Calvin Harris", "Ellie Goulding", "Sia", "The Script", 
-        "Florence + The Machine", "Mumford & Sons", "Arctic Monkeys", "Selena Gomez", "The Chainsmokers", 
-        "Major Lazer", "Kygo", "Drake"
+      "Mickey Mouse", "Donald Duck", "Bugs Bunny", "Tom (Tom en Jerry)",  "Nemo (Finding Nemo)",
+      "SpongeBob", "Scooby-Doo", "Samson (Samson & Gert)", "Mega Mindy", "Jerry (Tom en Jerry)", "Daffy Duck",
+      "Plop (Kabouter Plop)", "Grote Smurf (De Smurfen)", "Maya de Bij",  "Olaf (Frozen)",
+      "Bumba", "Piet Piraat", "Dora", "Elsa (Frozen)", "Goofy", "Marge Simpson (The Simpsons)", 
+      "Anna (Frozen)", "Simba (The Lion King)", "Dory (Finding Nemo)",  "Gargamel (De Smurfen)","Timon (The Lion King)", "Woody Woodpecker", "Garfield", 
+       "Woody (Toy Story)", "Buzz Lightyear (Toy Story)", "Shrek", "Fiona (Shrek)", "Peppa Pig", "Pumbaa (The Lion King)", "Pikachu","Ash Ketchum (Pokémon)",
+      "Gru (Despicable Me)", "Marlin (Finding Nemo)", "Belle (Belle en het Beest)", 
+      "Rapunzel (Tangled)", "Ariel (De Kleine Zeemeermin)", "WALL-E", "Bluey", "Taz", 
+      "Shaun het Schaap", "Winnie de Pooh","Tweety", "Elmer Fudd"
     ];
 
 
@@ -33,16 +35,14 @@ driver = webdriver.Chrome(service=Service(path), options=options)
 
 
 def fetch_and_save_image(query):
-    # Open the DuckDuckGo search for an animal (example: "Hond")
-    driver.get("https://duckduckgo.com")
-    driver.delete_all_cookies()
-    driver.get(f"https://duckduckgo.com/?q=&(artiest)+{query}+portret&t=h_&iax=images&ia=images")
+    # driver.get(f"https://duckduckgo.com/?q=&(artiest)+{query}+portret&t=h_&iax=images&ia=images")
+    driver.get(f"https://duckduckgo.com/?q={query}&t=h_&iax=images&ia=images")
 
     # Wait for the page to load and images to render
     time.sleep(5)  # Adjust the sleep time if necessary
 
     # Scroll down to load more images (for lazy-loading)
-    # driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
+    driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
     # time.sleep(5)  # Wait for additional images to load
 
     # Collect all image elements after rendering
@@ -60,7 +60,7 @@ def fetch_and_save_image(query):
         print(f"First valid image URL: {valid_img_urls[0]}")
         import requests 
         response = requests.get(valid_img_urls[0])
-        file_path = f"artiesten/{query}.png"
+        file_path = f"animatiefiguren/{query}.png"
         with open(file_path, "wb") as file:
             file.write(response.content)
 

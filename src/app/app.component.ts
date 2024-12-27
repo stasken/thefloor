@@ -267,6 +267,7 @@ export class AppComponent {
       const path = `artiesten/${artist}.png`;
       return new Question(categoryId, "", artist, path, order, true, false);
     });
+    this.addAllQuestions(questions);
   }
 
   generate50PictureQuestionsForSports() {
@@ -330,6 +331,54 @@ export class AppComponent {
     return questions;
   }
 
+  generate50PictureQuestionsVoorAnimatiefiguren() {
+    const figuren = [
+      "Mickey Mouse", "Donald Duck", "Bugs Bunny", "Tom (Tom en Jerry)",  "Nemo (Finding Nemo)",
+      "SpongeBob", "Scooby-Doo", "Samson (Samson & Gert)", "Mega Mindy", "Jerry (Tom en Jerry)", "Daffy Duck",
+      "Plop (Kabouter Plop)", "Grote Smurf (De Smurfen)", "Maya de Bij",  "Olaf (Frozen)",
+      "Bumba", "Piet Piraat", "Dora", "Elsa (Frozen)", "Goofy", "Marge Simpson (The Simpsons)", 
+      "Anna (Frozen)", "Simba (The Lion King)", "Dory (Finding Nemo)",  "Gargamel (De Smurfen)","Timon (The Lion King)", "Woody Woodpecker", "Garfield", 
+       "Woody (Toy Story)", "Buzz Lightyear (Toy Story)", "Shrek", "Fiona (Shrek)", "Peppa Pig", "Pumbaa (The Lion King)", "Pikachu","Ash Ketchum (Pokémon)",
+      "Gru (Despicable Me)", "Marlin (Finding Nemo)", "Belle (Belle en het Beest)", 
+      "Rapunzel (Tangled)", "Ariel (De Kleine Zeemeermin)", "WALL-E", "Bluey", "Taz", 
+      "Shaun het Schaap", "Winnie de Pooh","Tweety", "Elmer Fudd"
+    ];
+  
+    const categorieId = "3PQy1Eew1wa864OPtPwQ";
+    const vragen: Question[] = figuren.map((figuur, index) => {
+      const volgorde = index + 1; // Start bij 1
+      const pad = `animatiefiguren/${figuur}.png`;
+      return new Question(categorieId, "", figuur, pad, volgorde, true, false);
+    });
+    this.addAllQuestions(vragen);
+  }
+  
+  generate50PictureQuestionsVoorVoetbalspelers() {
+    const voetballers = [
+      "Lionel Messi", "Cristiano Ronaldo (CR7)", "Diego Maradona", "Pelé", 
+      "Kevin De Bruyne", "Romelu Lukaku", "Eden Hazard", "Thibaut Courtois", 
+      "Zlatan Ibrahimović", "Kylian Mbappé", "Erling Haaland", "Robert Lewandowski", 
+      "Virgil van Dijk", "Mohamed Salah", "Neymar Jr.", "Paolo Maldini", "Johan Cruijff", 
+      "Zinédine Zidane", "Thierry Henry", "Franky Van der Elst", "Jan Ceulemans", 
+      "Enzo Scifo", "Michel Preud'homme", "Jean-Marie Pfaff", "Wesley Sonck", 
+      "Toby Alderweireld", "Dries Mertens", "Vincent Kompany", "Axel Witsel", 
+      "Youri Tielemans", "Marc Wilmots", "Daniel Van Buyten", "Jan Vertonghen", 
+      "Radja Nainggolan", "Luis Suárez", "Didier Drogba", "Ryan Giggs", 
+      "Peter Crouch", "Roy Keane", "Patrice Evra", "Ronaldinho", "David Beckham", 
+      "George Best", "Alan Shearer", "Rudi Völler", "Karl-Heinz Rummenigge", 
+      "Andrea Pirlo", "Francesco Totti", "Mario Balotelli", "Clarence Seedorf"
+    ];
+  
+    const categorieId = "D3MTECBzlRE2UCvTBMw3";
+    const vragen: Question[] = voetballers.map((speler, index) => {
+      const volgorde = index + 1; // Start bij 1
+      const pad = `voetbal/${speler}.png`;
+      return new Question(categorieId, "", speler, pad, volgorde, true, false);
+    });
+    this.addAllQuestions(vragen);
+  }
+  
+
   // NOT DONE
   generate50PictureQuestionsForLogos() {
     const logos = [
@@ -352,67 +401,67 @@ export class AppComponent {
 
   generate50PictureQuestionsForAnagrams() {
     const anagrams = [
-      { question: "EEN", answer: "NEE" },
-      { question: "RAT", answer: "ART" },
-      { question: "KOE", answer: "OKE" },
-      { question: "TON", answer: "NOT" },
-      { question: "EIK", answer: "KIE" },
-      { question: "NAT", answer: "TAN" },
-      { question: "NET", answer: "TEN" },
-      { question: "TAS", answer: "SAT" },
-      { question: "MAN", answer: "NAM" },
-      { question: "KAT", answer: "TAK" },
-      { question: "AAN", answer: "ANA" },
-      { question: "HAL", answer: "LAH" },
-      { question: "BAN", answer: "NAB" },
-      { question: "PAN", answer: "NAP" },
-      { question: "BOEK", answer: "KOEB" },
-      { question: "KAAS", answer: "SAKA" },
-      { question: "BOOM", answer: "MOOB" },
-      { question: "LEEN", answer: "NEEL" },
-      { question: "MEER", answer: "REEM" },
-      { question: "DOOR", answer: "ROOD" },
-      { question: "LAMP", answer: "MALP" },
-      { question: "RAAM", answer: "AMAR" },
-      { question: "TUIN", answer: "UNIT" },
-      { question: "HOUT", answer: "TOUH" },
-      { question: "BLOK", answer: "KLOB" },
-      { question: "DIJK", answer: "KDIJ" },
-      { question: "LAND", answer: "NDAL" },
-      { question: "TROTS", answer: "STORT" },
-      { question: "STORM", answer: "MORTS" },
-      { question: "TIJGER", answer: "GERTIJ" },
-      { question: "KAMER", answer: "MERAK" },
-      { question: "BOEKEN", answer: "KENBOE" },
-      { question: "VELDEN", answer: "DELVEN" },
-      { question: "BRAND", answer: "BARND" },
-      { question: "KLANK", answer: "KNALK" },
-      { question: "ZWAAI", answer: "WAIZ" },
-      { question: "STROOP", answer: "PORTOS" },
-      { question: "BASTEN", answer: "BESTAN" },
-      { question: "KRANEN", answer: "REKANN" },
-      { question: "PLANKEN", answer: "ANKELPN" },
-      { question: "BERICHT", answer: "RICHTEB" },
-      { question: "SCHADUW", answer: "WUCHADS" },
-      { question: "DOCHTER", answer: "TERDOCH" },
-      { question: "BOODSCHAP", answer: "HAPSCODBO" },
-      { question: "GEMAKKELIJK", answer: "KEGLIJAKKEM" },
-      { question: "DRAADLOOS", answer: "RAADSDOOL" },
-      { question: "VERKEERD", answer: "DREKERVE" },
-      { question: "MISLEIDEND", answer: "DEINDLIMES" },
-      { question: "VERSPREIDING", answer: "SPEERDIRVING" },
-      { question: "ONGELOOFLIJK", answer: "KOFLUNLOIGEJ" }
+        { question: "ROTS", answer: "SORT" },
+        { question: "BRAND", answer: "BARND" },
+        { question: "HOUT", answer: "THOU" },
+        { question: "TUIN", answer: "UNIT" },
+        { question: "KAMER", answer: "MAKER" },
+        { question: "DOORN", answer: "RONDO" },
+        { question: "GLANS", answer: "SLANG" },
+        { question: "KRING", answer: "GRINK" },
+        { question: "RAKEN", answer: "NEARK" },
+        { question: "BOODS", answer: "DOSBO" },
+        { question: "LAMPEN", answer: "PLANEM" },
+        { question: "STADEN", answer: "DANSET" },
+        { question: "METER", answer: "TERME" },
+        { question: "BRIEVEN", answer: "REBIVEN" },
+        { question: "PAARDEN", answer: "PANDERA" },
+        { question: "VERF", answer: "FERV" },
+        { question: "BLOEM", answer: "MOBLE" },
+        { question: "DRAAI", answer: "RADIA" },
+        { question: "GRAS", answer: "RAGS" },
+        { question: "VROUW", answer: "WROUV" },
+        { question: "DOOS", answer: "OSDO" },
+        { question: "KRANK", answer: "KNARK" },
+        { question: "LADEN", answer: "NADLE" },
+        { question: "VECHTEN", answer: "CHETVNE" },
+        { question: "BERICHT", answer: "ITCHBER" },
+        { question: "DOCHTER", answer: "TERCHOD" },
+        { question: "GEREED", answer: "DEGREE" },
+        { question: "VORMEN", answer: "RENOVM" },
+        { question: "PAREL", answer: "LAPER" },
+        { question: "SCHILD", answer: "CHILDS" },
+        { question: "GERAAD", answer: "RAAGED" },
+        { question: "VERLANG", answer: "GANLVER" },
+        { question: "ROOFDIER", answer: "REDIROOF" },
+        { question: "PLANNING", answer: "PINANGLN" },
+        { question: "REUZEN", answer: "ZURNER" },
+        { question: "KARAVAAN", answer: "ANARKAVA" },
+        { question: "BEDRIJF", answer: "BRIEFJD" },
+        { question: "STORMIG", answer: "GROMSIT" },
+        { question: "HANDDOEK", answer: "ODHNAEKD" },
+        { question: "ONTWERP", answer: "POTREWN" },
+        { question: "HORIZON", answer: "RINOOHZ" },
+        { question: "SCHADUW", answer: "WADHUSC" },
+        { question: "DUURZAAM", answer: "MAAZRUDU" },
+        { question: "INKTVLEK", answer: "VETLINKK" },
+        { question: "STATION", answer: "OTNISAT" },
+        { question: "OPLOSSEN", answer: "SOLNOPSE" },
+        { question: "VERLANGEN", answer: "RENVANLEG" },
+        { question: "NACHTMERRIE", answer: "MINCHATRRIE" },
+        { question: "ONDERZOEK", answer: "ODREZNOEK" },
+        { question: "UITDAGING", answer: "TINGUADIG" }
     ];
 
     const categoryId = "RiE9soitDp6MxWjvp8ny";
     const questions: Question[] = anagrams.map((a, index) => {
-      const order = index + 1; // Order starts at 1
-      const path = `anagrammen/${index + 1}.png`; // Dynamically generate path if needed
-      return new Question(categoryId, a.question.toUpperCase(), a.answer.toUpperCase(), path, order, false, false);
+        const order = index + 1; // Order starts at 1
+        const path = `anagrammen/${index + 1}.png`; // Dynamically generate path
+        return new Question(categoryId, a.question.toUpperCase(), a.answer.toUpperCase(), path, order, false, false);
     });
 
     return questions;
-  }
+}
 
   
 }

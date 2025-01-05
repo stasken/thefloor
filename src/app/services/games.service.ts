@@ -27,19 +27,20 @@ export class GamesService {
     return gameArray;
   }
 
-  addGame(game: Game) {
-    const gameRef = collection(this.firestore, "games")
-    return addDoc(gameRef, game)
+  async addGame(game: Game) {
+    return await addDoc(collection(this.firestore, "games"), game);
   }
 
-  startGame(gameId:string) {
+  startGame(gameId: string, categoryPerUser: number) {
     const userRef = doc(this.firestore, `games/${gameId}`);
     return updateDoc(userRef, {
-      started: true
+      started: true,
+      usersChosen: true,
+      categoryPerUser : categoryPerUser
     });
   }
 
-  updateUser(userId: string,name:string,color:string) {
+  updateUser(userId: string, name: string, color: string) {
     const userRef = doc(this.firestore, `users/${userId}`);
     return updateDoc(userRef, {
       name: name,

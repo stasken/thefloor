@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CategoriesInfoModalComponent } from 'src/app/modals/categories-info-modal/categories-info-modal.component';
 import { Category } from 'src/app/models/category';
+import { Game } from 'src/app/models/game';
 import { GameCategory } from 'src/app/models/gameCategory';
 import { User } from 'src/app/models/user';
 import { CategoryService } from 'src/app/services/category.service';
@@ -18,20 +19,39 @@ export class DivideCategoriesComponent implements OnInit {
   categories: Category[] = [];
   gameCategories: GameCategory[] = [];
   users: User[] = [];
-  gameId!: string;
+  game!: Game;
+  started: boolean = false;
   requiredCategoryCount = -1;
   categoriesValidated = false;
 
-  constructor(private router: Router, private storage: StorageService, private modalController: ModalController, private catService: CategoryService, private userService: UserService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private storage: StorageService, private modalController: ModalController, private catService: CategoryService, private userService: UserService) { }
 
   async ngOnInit() {
-    await this.storage.get('gameId').then((res) => {
+    await this.storage.get('game').then((res) => {
       if (res) {
-        this.gameId = res;
+        this.game = JSON.parse(res);
+        this.started = this.game.started;
         this.getUsersOfGame()
         this.getCategories();
       }
     });
+  }
+
+  testCat() {
+    let currentCounter = 0;
+    let currentUser = 0;
+    console.log(this.gameCategories);
+
+    this.gameCategories.forEach(gc => {
+      gc.currentUserId = this.users[currentUser].id ?? "";
+      gc.color = this.users[currentUser].color;
+      currentCounter++;
+      if (currentCounter === 5) {
+        currentCounter = 0;
+        currentUser++;
+      }
+    });
+    console.log(this.gameCategories);
   }
 
   getCategories() {
@@ -40,8 +60,8 @@ export class DivideCategoriesComponent implements OnInit {
       let catss = cats;
       // let catss = cats.slice(0, 10);
       catss.forEach(cat => {
-        if (cat && cat.id) {
-          let gc = new GameCategory(this.gameId, 0, cat.id, cat.name, "", "", "black");
+        if (cat && cat.id && this.game && this.game.id) {
+          let gc = new GameCategory(this.game.id, 0, cat.id, cat.name, "", "", "black");
           gamecats.push(gc);
         }
       });
@@ -52,9 +72,11 @@ export class DivideCategoriesComponent implements OnInit {
   }
 
   getUsersOfGame() {
-    this.userService.getAllPlayers(this.gameId).then(res => {
-      this.users = [...res];
-    })
+    if (this.game && this.game.id) {
+      this.userService.getAllPlayers(this.game.id).then(res => {
+        this.users = [...res];
+      })
+    }
   }
 
   updateGameCategory(e: any, cat: Category) {

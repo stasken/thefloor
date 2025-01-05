@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Game } from 'src/app/models/game';
 import { GameCategory } from 'src/app/models/gameCategory';
 import { User } from 'src/app/models/user';
 import { CategoryService } from 'src/app/services/category.service';
@@ -13,7 +14,7 @@ import { UserService } from 'src/app/services/users.service';
   styleUrls: ['./floor.component.scss'],
 })
 export class FloorComponent implements OnInit {
-  gameId!: string;
+  game!: Game;
   gameCategories: GameCategory[] = [];
   users: User[] = [];
   currentUser!: User;
@@ -27,7 +28,10 @@ export class FloorComponent implements OnInit {
   constructor(private route: ActivatedRoute, private storage: StorageService, private userService: UserService, private router: Router, private toaster: ToasterService, private catService: CategoryService) { }
 
   async ngOnInit() {
-    await this.getUsersOfGame();
+    await this.getGameFromStorage();
+    if (this.users.length === 0) {
+      await this.getUsersOfGame();
+    }
     await this.route.queryParams.subscribe(async params => {
       this.getCurrentGameCategories();
       if (params['winner']) {
@@ -36,30 +40,37 @@ export class FloorComponent implements OnInit {
     });
   }
 
+  async getGameFromStorage() {
+    await this.storage.get('game').then((res) => {
+      this.game = JSON.parse(res);
+    })
+  }
+
   async getUsersOfGame() {
-    await this.storage.get('gameId').then((res) => {
-      this.userService.getAllPlayers(res).then(users => {
+    if (!this.game) {
+      await this.getGameFromStorage();
+    }
+    if (this.game.id) {
+      this.userService.getAllPlayers(this.game.id).then(users => {
         this.users = [...users];
       })
-    });
+    }
   }
 
   async getCurrentGameCategories() {
-    await this.storage.get('gameId').then((res) => {
-      if (res) {
-        this.gameId = res;
-        this.catService.getAllGameCategories(this.gameId).then(gc => {
-          // const repeatedArray = Array.from({ length: 5 }, () => gc).flat();
-          // this.gameCategories = [...repeatedArray]
-          this.gameCategories = [...gc]
-          console.log(this.gameCategories);
-
-          if (this.gameCategories.length === 0) {
-            this.router.navigateByUrl('/board/categories');
-          }
-        })
-      }
-    });
+    if (!this.game) {
+      await this.getGameFromStorage();
+    }
+    if (this.game.id) {
+      this.catService.getAllGameCategories(this.game.id).then(gc => {
+        // const repeatedArray = Array.from({ length: 5 }, () => gc).flat();
+        // this.gameCategories = [...repeatedArray]
+        this.gameCategories = [...gc]
+        if (this.gameCategories.length === 0) {
+          this.router.navigateByUrl('/board/categories');
+        }
+      })
+    }
   }
 
   async doYourThing() {
@@ -91,7 +102,7 @@ export class FloorComponent implements OnInit {
     let index = randomNr % soleGcs.length;
     let id = soleGcs[index].id;
     console.log(index);
-    
+
     this.transitionDivBorder(id ?? "");
   }
 
@@ -112,14 +123,14 @@ export class FloorComponent implements OnInit {
       let chosenGc = this.gameCategories[chosenGcIndex];
       console.log("chosen Gc: ");
       console.log(chosenGc);
-      
+
       let chosenGcs = this.gameCategories.filter(g => g.categoryName === chosenGc.categoryName);
       console.log("chosen GCs same field: ");
       console.log(chosenGcs);
-      
+
       let chosenUser = this.users.find(u => u.id === chosenGc.currentUserId);
       console.log(chosenUser);
-      
+
       if (chosenUser) {
         this.currentUser = chosenUser;
         this.storage.set("currentChallengingGc", chosenGc);
@@ -161,7 +172,8 @@ export class FloorComponent implements OnInit {
 
     this.router.navigate(['/duel'], {
       queryParams: {
-        gameId: this.gameId,
+        gameId: this.game.id,
+        currentPickedCategory: this.currentPickedCategory,
         otherCategoryName: this.otherCategoryName,
         challengerId: this.currentUser.id,
         challengedUserId: this.currentPickedUser?.id,

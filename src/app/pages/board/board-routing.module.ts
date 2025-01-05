@@ -9,7 +9,7 @@ const routes: Routes = [
     component: BoardPage,
   },
   {
-    path: 'categories',
+    path: 'categories/:gameId',
     component: DivideCategoriesComponent
   }
 ];

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { addDoc, collection, doc, Firestore, getDocs, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,8 @@ export class UserService {
   //   return this.usersSubject.value;
   // }
 
-  async getAllPlayers(gameId:string) {
+  async getAllPlayers(gameId: string) {
     let users: User[] = [];
-
     const userRef = collection(this.firestore, "users")
     const q = query(
       userRef,
@@ -42,11 +41,16 @@ export class UserService {
     // this.usersSubject.next(updatedUsers);
   }
 
-  updateUser(userId: string,name:string,color:string) {
+  updateUser(userId: string, name: string, color: string) {
     const userRef = doc(this.firestore, `users/${userId}`);
     return updateDoc(userRef, {
       name: name,
       color: color,
     });
+  }
+
+  async deleteUser(userId: string) {
+    const userRef = doc(this.firestore, `users/${userId}`);
+    return await deleteDoc(userRef);
   }
 }

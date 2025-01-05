@@ -16,7 +16,6 @@ export class AppComponent {
   async ngOnInit() {
     await this.storage.init();
     this.catService.getAllCategories().then(res => {
-      console.log(res.length);
     })
 
   }

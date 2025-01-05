@@ -4,7 +4,7 @@
     <h5>No users yet. Click "Add user" to add your first player.</h5>
   </div>
   <div *ngFor="let user of users">
-    <app-user *ngIf="user" [user]="user" [started]="started"></app-user>
+    <app-user *ngIf="user" [user]="user" [started]="started" (userDeletedEmitter)="userDeleted($event)"></app-user>
   </div>
 
   <ion-button (click)="addUser()" [disabled]="started">Add User</ion-button>

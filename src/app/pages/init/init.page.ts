@@ -29,15 +29,15 @@ export class InitPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.gamesService.getAllGames().then(games => {
+    this.storage.get('game').then(game => {
+      if (game) {
+        this.currentGame = JSON.parse(game);
+        this.router.navigateByUrl('/settings');
+        return;
+      }
+    })
+    await this.gamesService.getAllGames().then(games => {
       this.allGames = [...games];
-      this.storage.get('gameId').then(id => {
-        const matchedGame = this.allGames.find(game => game.id === id);
-        if (matchedGame) {
-          this.currentGame = matchedGame;
-          this.router.navigateByUrl('/settings');
-        }
-      })
     })
   }
 
@@ -46,13 +46,10 @@ export class InitPage implements OnInit {
       component: LoadGameModalComponent,
       componentProps: { games: this.allGames },
     });
-
-    // 8wT5C0UGjFRnzU56OLOs
     openGameModal.onDidDismiss().then((data) => {
       let gameInputs = data.data;
       if (gameInputs) {
-        this.storage.set("gameId", gameInputs.id);
-        this.storage.set("started", gameInputs.started);
+        this.storage.set("game", JSON.stringify(gameInputs));
         this.toaster.showToast("Game loaded!", 2000, "success");
         this.router.navigateByUrl('/settings');
       }
@@ -74,8 +71,11 @@ export class InitPage implements OnInit {
           categories: gameInputs.categories,
           starttime: gameInputs.starttime,
           started: gameInputs.started,
+          categoryPerUser: gameInputs.categoryPerUser,
+          usersChosen: gameInputs.usersChosen,
         }).then(async res => {
-          await this.storage.set("gameId", res.id);
+          gameInputs.id = res.id;
+          await this.storage.set("game", JSON.stringify(gameInputs));
           this.toaster.showToast("Game created!", 2000, "success");
           this.router.navigateByUrl('/settings');
         }, (error) => {

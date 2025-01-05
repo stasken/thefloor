@@ -36,6 +36,12 @@
         Info
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button fill="solid" (click)="testCat()" >
+        <ion-icon slot="end" name="information-circle-outline"></ion-icon>
+        TEST
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="secondary">
       <ion-button fill="solid" (click)="saveAllCategories()" [disabled]="!categoriesValidated">
         <ion-icon slot="end" name="save"></ion-icon>

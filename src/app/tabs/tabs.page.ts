@@ -23,8 +23,6 @@ export class TabsPage implements OnInit {
      });
   }
   navigateToBoard() {
-    console.log("lol");
-    
     this.router.navigate(['/board'],{
       replaceUrl : true,
       queryParams: {}

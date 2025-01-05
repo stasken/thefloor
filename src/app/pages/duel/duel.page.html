@@ -19,7 +19,7 @@
         <ion-icon slot="end" name="checkmark"></ion-icon>
         Correct
       </ion-button>
-      <ion-button fill="outline" color="danger" (click)="pass()">
+      <ion-button fill="outline" [disabled]="userPassed" color="danger" (click)="pass()">
         <ion-icon slot="end" name="close"></ion-icon>
         Pas
       </ion-button>

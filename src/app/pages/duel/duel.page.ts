@@ -50,7 +50,8 @@ export class DuelPage implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe(async params => {
       this.gameId = params['gameId'];
-      this.otherCategoryName = params['otherCategoryName'];
+      this.otherCategoryName = params['otherCategoryName'];      
+      // let currentPickedCategory = params['currentPickedCategory']
       let challengerId = params['challengerId']
       let challengedUserId = params['challengedUserId']
       await this.getAllData(challengerId, challengedUserId);
@@ -91,11 +92,7 @@ export class DuelPage implements OnInit, OnDestroy {
   }
 
   getQuestions() {
-    // CiW0bBFO9DwPBISnCF2z Wiskunde
-    // bvvQVpqwcG20lPgkjVz6 Movies
-    // 1ghVcJETp1OSac8DPA7J Vlaggen
-    // this.questionService.getQuestionsOfCategory(this.categoryId).then(qs => {
-    this.questionService.getQuestionsOfCategory("CiW0bBFO9DwPBISnCF2z").then(qs => {
+    this.questionService.getQuestionsOfCategory(this.gameCategory.categoryId).then(qs => {
       this.questions = [...qs]
       if (this.questions[0].isList && this.questions[0].isPicture) {
         this.isAudioRound = true;

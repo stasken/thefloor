@@ -14,7 +14,7 @@ export class CreateGameModalComponent implements OnInit {
   categories: number;
 
   constructor(private modalController: ModalController, private toaster: ToasterService) {
-    this.categories = 0;
+    this.categories = 25;
   }
 
   ngOnInit() {

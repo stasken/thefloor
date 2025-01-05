@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Cmyk, ColorPickerService } from 'ngx-color-picker';
 import { User } from 'src/app/models/user';
 import { ToasterService } from 'src/app/services/toaster.service';
@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services/users.service';
 export class UserComponent implements OnInit {
   @Input() started: boolean = false;
   @Input() user!: User;
+
+  @Output() userDeletedEmitter: EventEmitter<string> = new EventEmitter<string>();
   originalUser!: User;
   changedUser!: User;
   userHasChanged: boolean = false;
@@ -61,7 +63,7 @@ export class UserComponent implements OnInit {
       this.toaster.showToast("Trying to save a user without ID", 2000, "danger");
       return;
     }
-    this.userService.updateUser(this.changedUser.id,this.changedUser.name,this.changedUser.color).then(res => {
+    this.userService.updateUser(this.changedUser.id, this.changedUser.name, this.changedUser.color).then(res => {
       this.toaster.showToast("User saved", 2000, "success");
       this.originalUser = { ...this.changedUser }
       this.user = { ...this.changedUser }
@@ -85,6 +87,14 @@ export class UserComponent implements OnInit {
       return;
     }
     this.userHasChanged = false;
+  }
+
+  deleteUser() {
+    if (this.user.id) {
+      this.userService.deleteUser(this.user.id).then(res => {
+        this.userDeletedEmitter.emit(this.user.id);
+      })
+    }
   }
 
   public onChangeColorCmyk(color: string): Cmyk {

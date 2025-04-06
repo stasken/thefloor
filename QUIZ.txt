@@ -1,0 +1,74 @@
+1) Create game - vul naam in en aantal categorien 
+aantal categories niet belangrijk voor spel, enkel voor validatie dus moet meer dan 10 zijn
+
+2) BUTTON ADD GAME
+
+3) Nu op scherm /settings
+if 'Add user' knop disabled = niet clickable, refresh page
+
+4) Voeg users toe
+a) change hun color --> Rechts knop 'SAVE USER'
+
+5) ALS alle users toegevoegd zijn + gewenste kleuren --> START
+HIERNA geen changes op USERS mogelijk, enkel nieuw spel
+
+6) Divide categories
+Check info modal --> als "naam: 0 / Infinity" --> Settings --> logout --> login (load game) --> Login met naam
+--> Divide categories --> Info modal geeft nu normaal "naam: 0 / 5'
+--> Als die 5 getoond wordt --> OK
+ANDERS --> Bellen
+
+7) Om beurten elk een categorie kiezen.
+Uiteindelijk elk 5
+Misschien voor zekerst, af en toe, of voor SAVE button, prt screen van keuzes.
+Ge weet nooit
+
+8) Indien allemaal gekozen, elk 5, kleurt 'SAVE' button op.
+Klik SAVE
+
+9) Gamecategories wordt aangemaakt. Grid wordt aangemaakt.
+
+10) FLOOR SPEL IS BEGONNEN
+THE FLOOR KIEST EERSTE KANDIDAAT --> 'VOLGENDE'
+Dit kiest random TEGEL --> Wordt goudgekleurd
+
+11) DEZE moet kiezen --> kies categorie Links, Rechts, Onder, Boven (enkel niet jezelf)
+Onderaan staat er de tekst die aanduid wie wie aanvalt.
+Kan niet zichzelf kiezen (zelfde kleur)
+
+12) Dus de uitdager kiest LRBO, indien onmogelijk, kies tegel naar keuze.
+
+13) START DUEL (uitdager begint)
+
+14) UITDAGER en uitgedaagde houden zich klaar voor categorie XX
+
+15) Linkerbovenhoek staat naam gekozen categorie. Kijk in FIREBASE --> categorien -> op naam
+Kies deze gekozen categorie zijn ID
+Open nieuw tabblad open, eigen computerscherm (quiz staat op TV)
+GA naar app.component.cs, verander de ID van de category met de gevonden ID in Firebase zoals hierboven
+Deze methode:
+  getAllAnswers() {
+    this.questionService.getQuestionsOfCategory("Gj2KBLjMD3uLAwBkbC2o").then(res => {
+      res.forEach((a,index) => {
+        console.log(`${index}: ${a.question} -- \n${a.answer}`);
+      });      
+    })
+  }
+
+Verander de getQuestionsOfCategory(PARAMETER) --> id van gekozen categoryID
+Save en check antwoorden op jouw eigen tabblad
+
+16) Indien spelers klaar; UITDAGER begint. Klik 'START'. Quiz/duel begint.
+Indien Correct antwoord (ongeveer), klik op "CORRECT" --> beurt aan tegenspeler
+Indien fout, niets doen
+Indien speler zegt "PAS", klik "Pas". 3 seconden beginnen te tellen, daarna nieuwe vraag voor zelfde speler
+
+17) Na spel, één winnaar. Deze verovert uitgedaagde tegels.
+
+18) Terug op GRID --> Klik op "CHECK"
+Hier zien we alle veroverde tegels van die speler van die categorie.
+Winnaar kiest, met overwonnen tegels verder spelen (iemand uitdagen)
+Ofwel 'VOLGENDE'
+
+19) Daarna speler iemand uitdagen L,R,B,O van zijn veld.
+....

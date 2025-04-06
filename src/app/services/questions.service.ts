@@ -9,6 +9,7 @@ import { User } from '../models/user';
 export class QuestionsService {
   constructor(private firestore: Firestore) { }
 
+
   async getQuestionsOfCategory(categoryId: string) {
     let questions: Question[] = [];
 
@@ -51,4 +52,21 @@ export class QuestionsService {
     const gcRef = doc(this.firestore, `questions/${question.id}`);
     return await deleteDoc(gcRef);
   }
+
+  async getDistinctCategoryIds(): Promise<string[]> {
+    const questionsRef = collection(this.firestore, "questions");
+    const querySnapshot = await getDocs(questionsRef);
+  
+    const categoryIds = new Set<string>();
+  
+    querySnapshot.forEach((doc) => {
+      let data = doc.data() as Question;
+      if (data.categoryId) {
+        categoryIds.add(data.categoryId);
+      }
+    });
+  
+    return Array.from(categoryIds);
+  }
+  
 }

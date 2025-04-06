@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { DuelPage } from './duel.page';
 
 import { DuelPageRoutingModule } from './duel-routing.module';
+import { SolutionsComponent } from 'src/app/components/game/solutions/solutions.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { DuelPageRoutingModule } from './duel-routing.module';
     FormsModule,
     DuelPageRoutingModule
   ],
-  declarations: [DuelPage]
+  declarations: [DuelPage, SolutionsComponent]
 })
 export class DuelPageModule {}

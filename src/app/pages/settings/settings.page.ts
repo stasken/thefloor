@@ -19,10 +19,10 @@ export class SettingsPage implements ViewDidEnter {
   @ViewChild(AddUsersComponent) adduserComp!: AddUsersComponent;
 
   constructor(private storage: StorageService, private toaster: ToasterService, private router: Router, private gameService: GamesService) {
-    this.storage.get('game').then(game => {
-      this.game = JSON.parse(game);
-      this.started = this.game.started;
-    })
+    // this.storage.get('game').then(game => {
+    //   this.game = JSON.parse(game);
+    //   this.started = this.game.started;
+    // })
   }
   ionViewDidEnter(): void {
     // this.storage.get('game').then((res) => {
@@ -33,7 +33,13 @@ export class SettingsPage implements ViewDidEnter {
     //   }
     // });
     // console.log("Setting DID VIEW ENTER");
-    
+    this.storage.get('game').then(game => {
+      console.log('game:', game);
+      
+      this.game = JSON.parse(game);
+      this.started = this.game.started;
+      this.adduserComp.getUsersOfGame(game);
+    })
   }
 
   getLengthOfUsers(length: number){

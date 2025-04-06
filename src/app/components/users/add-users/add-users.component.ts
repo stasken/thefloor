@@ -22,6 +22,7 @@ export class AddUsersComponent implements OnInit {
 
   async ngOnInit() {
     await this.storage.get('game').then(async (res) => {
+
       if (res) {
         this.game = JSON.parse(res);
         this.started = this.game.started;
@@ -35,6 +36,7 @@ export class AddUsersComponent implements OnInit {
   async getUsersOfGame(gameId: string) {
     this.userService.getAllPlayers(gameId).then(res => {
       this.users = [...res];
+      
       this.lengthOfUsersEmitter.emit(this.users.length)
     })
   }

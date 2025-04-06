@@ -1,0 +1,11 @@
+<div class="questions-container">
+  <div *ngIf="questions">
+    <div *ngFor="let q of questions; let i = index">
+      <div>
+        <span>{{ i + 1 }}. {{ q.question }}:</span><br /><br />
+        <span><strong>{{ q.answer }}</strong></span><br /><br />
+      </div>
+      <br /><br />
+    </div>
+  </div>
+</div>

@@ -142,6 +142,9 @@ export class DuelPage implements OnInit, OnDestroy {
   }
 
   correctAnswerGiven() {
+    this.audio.play("correct");
+    console.log("correct");
+    
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe(); // Stop current timer
     }
@@ -153,6 +156,7 @@ export class DuelPage implements OnInit, OnDestroy {
   }
 
   pass() {
+    this.audio.play("false");
     this.userPassed = true;
     setTimeout(() => {
       this.nextQuestion();

@@ -14,6 +14,7 @@
   </ion-header>
 
   <div id="duel-container">
+    <h1>{{ currentQuestionIndex + 1 }}</h1>
     <div class="duel-actions">
       <ion-button fill="outline" [disabled]="userPassed" color="success" (click)="correctAnswerGiven()">
         <ion-icon slot="end" name="checkmark"></ion-icon>
